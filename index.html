@@ -1640,6 +1640,7 @@
             `;
         }
 
+        // Initialize application on window load & load from Supabase cloud
         window.onload = async function() {
             await loadDataFromSupabase();
             if (window.location.hash === '#admin') {
