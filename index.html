@@ -18,22 +18,13 @@
                 extend: {
                     colors: {
                         theme: {
-                            50: 'var(--theme-50)',
-                            100: 'var(--theme-100)',
-                            200: 'var(--theme-200)',
-                            300: 'var(--theme-300)',
-                            400: 'var(--theme-400)',
-                            500: 'var(--theme-500)',
-                            600: 'var(--theme-600)',
-                            700: 'var(--theme-700)',
-                            800: 'var(--theme-800)',
-                            900: 'var(--theme-900)',
-                            950: 'var(--theme-950)',
+                            50: 'var(--theme-50)', 100: 'var(--theme-100)', 200: 'var(--theme-200)',
+                            300: 'var(--theme-300)', 400: 'var(--theme-400)', 500: 'var(--theme-500)',
+                            600: 'var(--theme-600)', 700: 'var(--theme-700)', 800: 'var(--theme-800)',
+                            900: 'var(--theme-900)', 950: 'var(--theme-950)',
                         }
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif']
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
             }
         }
@@ -56,12 +47,6 @@
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
         ::-webkit-scrollbar-thumb { background: var(--theme-600); border-radius: 9999px; }
         .scrollbar-none::-webkit-scrollbar { display: none; }
-        
-        /* Modal Transitions */
-        .modal-enter { opacity: 0; transform: scale(0.95); }
-        .modal-enter-active { opacity: 1; transform: scale(1); transition: all 0.3s ease; }
-        .modal-leave { opacity: 1; transform: scale(1); }
-        .modal-leave-active { opacity: 0; transform: scale(0.95); transition: all 0.2s ease; }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased pb-20 md:pb-0 transition-colors duration-300">
@@ -98,16 +83,13 @@
         </div>
     </header>
 
-    <main id="app-main" class="min-h-[calc(100vh-4rem)]">
-        <!-- Views injected via router -->
-    </main>
+    <main id="app-main" class="min-h-[calc(100vh-4rem)]"></main>
 
     <!-- Cart Drawer Modal -->
     <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeCartDrawer()"></div>
         <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
             <div class="w-screen max-w-md bg-white dark:bg-slate-900 shadow-2xl flex flex-col relative">
-                
                 <!-- Timer Banner -->
                 <div id="cart-timer-banner" class="hidden bg-red-50 dark:bg-red-950/40 border-b border-red-200 dark:border-red-900 px-4 py-2 flex justify-between items-center text-red-600 dark:text-red-400 text-xs font-bold">
                     <div class="flex items-center"><i class="fa-solid fa-clock mr-2 animate-pulse"></i> Hold reserved for:</div>
@@ -131,9 +113,7 @@
     <!-- Owner Modal Details -->
     <div id="owner-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-md" onclick="closeOwnerModal()"></div>
-        <div class="relative bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-2xl transform transition-transform" id="owner-modal-content">
-            <!-- Injected dynamically -->
-        </div>
+        <div class="relative bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-2xl transform transition-transform" id="owner-modal-content"></div>
     </div>
 
     <!-- Mobile Bottom Nav -->
@@ -245,10 +225,7 @@
             toast.innerHTML = `<i class="fa-solid ${icon} text-lg"></i><span class="text-sm font-medium">${message}</span>`;
             container.appendChild(toast);
             setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
-            setTimeout(() => {
-                toast.classList.add('translate-y-2', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
+            setTimeout(() => { toast.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3500);
         }
 
         const router = {
@@ -286,9 +263,7 @@
 
         window.addEventListener('hashchange', () => {
             const hash = window.location.hash.replace('#', '') || 'home';
-            if (hash !== currentRoute) {
-                router.navigate(hash, null, true);
-            }
+            if (hash !== currentRoute) router.navigate(hash, null, true);
         });
 
         function updateActiveNavStyles() {
@@ -310,9 +285,7 @@
         }
 
         function renderHomeView() {
-            let featuredList = featuredProductIds.length > 0 
-                ? productsData.filter(p => featuredProductIds.includes(p.id)) 
-                : productsData.slice(0, 5);
+            let featuredList = featuredProductIds.length > 0 ? productsData.filter(p => featuredProductIds.includes(p.id)) : productsData.slice(0, 5);
 
             return `
                 <section class="relative text-white py-10 md:py-16 px-4 overflow-hidden" style="background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.95)), url('${siteSettings.heroBgImage}') center/cover no-repeat;">
@@ -346,7 +319,7 @@
                 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                     <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
                         <div>
-                            <span class="text-theme-600 dark:text-theme-500 font-bold text-xs uppercase tracking-widest">Categories</span>
+                            <span class="text-theme-600 font-bold text-xs uppercase tracking-widest">Categories</span>
                             <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">Browse Categories</h2>
                         </div>
                         <button onclick="router.navigate('catalogue')" class="mt-4 md:mt-0 text-theme-600 font-semibold text-sm hover:underline flex items-center">View All <i class="fa-solid fa-arrow-right ml-2"></i></button>
@@ -469,8 +442,7 @@
                     </div>
                 </div>
             `;
-            const modal = document.getElementById('owner-modal');
-            modal.classList.remove('hidden');
+            document.getElementById('owner-modal').classList.remove('hidden');
         }
         function closeOwnerModal() { document.getElementById('owner-modal').classList.add('hidden'); }
 
@@ -561,18 +533,15 @@
             container.innerHTML = prods.length > 0 ? prods.map(p => renderProductCard(p)).join('') : '<div class="col-span-full py-10 text-center"><p class="text-slate-400 text-xs">No products found.</p></div>';
             
             document.querySelectorAll('.cat-filter-btn').forEach(btn => {
-                if(btn.dataset.cat === selectedCategoryFilter) {
-                    btn.className = "cat-filter-btn whitespace-nowrap px-4 py-2 rounded-xl text-xs font-bold transition bg-theme-600 text-white shadow";
-                } else {
-                    btn.className = "cat-filter-btn whitespace-nowrap px-4 py-2 rounded-xl text-xs font-bold transition bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300";
-                }
+                if(btn.dataset.cat === selectedCategoryFilter) btn.className = "cat-filter-btn whitespace-nowrap px-4 py-2 rounded-xl text-xs font-bold transition bg-theme-600 text-white shadow";
+                else btn.className = "cat-filter-btn whitespace-nowrap px-4 py-2 rounded-xl text-xs font-bold transition bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300";
             });
         }
 
         function setCategoryFilter(cat) {
             selectedCategoryFilter = cat;
-            if (currentRoute === 'catalogue') { updateCatalogueDOM(); } 
-            else { router.navigate('catalogue', cat); }
+            if (currentRoute === 'catalogue') updateCatalogueDOM(); 
+            else router.navigate('catalogue', cat);
         }
 
         function handleSearchInput(val) {
@@ -614,8 +583,7 @@
             if (!prod) return;
             const ex = cart.find(i => i.id === id);
             if (ex) { ex.qty += qty; } else { cart.push({ ...prod, qty }); }
-            updateCartBadge();
-            refreshCardAction(id);
+            updateCartBadge(); refreshCardAction(id);
             if(timerData.enabled && cart.length === 1 && !cartTimerInterval) startCartTimer();
         }
 
@@ -625,17 +593,13 @@
                 item.qty += delta;
                 if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
             }
-            updateCartBadge();
-            renderCartDrawerContent();
-            refreshCardAction(id);
+            updateCartBadge(); renderCartDrawerContent(); refreshCardAction(id);
             if(cart.length === 0) clearCartTimer();
         }
 
         function removeFromCart(id) {
             cart = cart.filter(i => i.id !== id);
-            updateCartBadge();
-            renderCartDrawerContent();
-            refreshCardAction(id);
+            updateCartBadge(); renderCartDrawerContent(); refreshCardAction(id);
             if(cart.length === 0) clearCartTimer();
         }
 
@@ -656,8 +620,7 @@
             cartTimerInterval = setInterval(updateTimerDisplay, 1000);
         }
         function clearCartTimer() {
-            clearInterval(cartTimerInterval);
-            cartTimerInterval = null;
+            clearInterval(cartTimerInterval); cartTimerInterval = null;
             const banner = document.getElementById('cart-timer-banner');
             if(banner) banner.classList.add('hidden');
         }
@@ -669,13 +632,8 @@
             
             const remaining = cartExpiryTime - Date.now();
             if(remaining <= 0) {
-                clearCartTimer();
-                cart = [];
-                updateCartBadge();
-                closeCartDrawer();
-                router.render();
-                showToast("Cart reserved time expired. Cart reset.", "error");
-                return;
+                clearCartTimer(); cart = []; updateCartBadge(); closeCartDrawer(); router.render();
+                showToast("Cart reserved time expired. Cart reset.", "error"); return;
             }
             banner.classList.remove('hidden');
             const m = Math.floor(remaining / 60000);
@@ -686,8 +644,7 @@
         function openCartDrawer() {
             checkoutStep = 'form';
             document.getElementById('cart-drawer').classList.remove('hidden');
-            renderCartDrawerContent();
-            updateTimerDisplay();
+            renderCartDrawerContent(); updateTimerDisplay();
         }
         function closeCartDrawer() { document.getElementById('cart-drawer').classList.add('hidden'); }
 
@@ -697,7 +654,6 @@
                 c.innerHTML = `<div class="text-center py-20"><i class="fa-solid fa-cart-shopping text-4xl text-slate-300 mb-4"></i><h4 class="font-bold">Cart is empty</h4></div>`;
                 return;
             }
-
             const totalMrp = cart.reduce((s, i) => s + (i.price * i.qty), 0);
             const totalDisc = cart.reduce((s, i) => s + ((i.discount || 0) ? (i.price * i.discount / 100) * i.qty : 0), 0);
             const subtotal = Math.round(totalMrp - totalDisc);
@@ -760,8 +716,7 @@
         function handleCustomerFormSubmit(e) {
             e.preventDefault();
             customerDetails = { name: document.getElementById('f-name').value, mobile: document.getElementById('f-mobile').value, email: document.getElementById('f-email').value, address: document.getElementById('f-address').value, city: document.getElementById('f-city').value, pincode: document.getElementById('f-pincode').value };
-            checkoutStep = 'summary';
-            renderCartDrawerContent();
+            checkoutStep = 'summary'; renderCartDrawerContent();
         }
 
         function sendWhatsAppTextEnquiry() {
@@ -780,20 +735,12 @@
         function closeMobileMenu() { document.getElementById('mobile-menu-modal').classList.add('hidden'); }
 
         // CMS / Text Views
-        function renderSafetyView() {
-            return `<div class="max-w-4xl mx-auto px-4 py-12 space-y-8"><div class="text-center space-y-3"><h1 class="text-3xl font-extrabold">Safety Centre</h1></div><div class="bg-white p-6 rounded-3xl shadow border"><h3>${safetyPointsData[0]?.title}</h3><p class="text-sm mt-2">${safetyPointsData[0]?.text}</p></div></div>`;
-        }
-        function renderComplianceView() {
-            return `<div class="max-w-4xl mx-auto px-4 py-12 space-y-8"><div class="text-center space-y-3"><h1 class="text-3xl font-extrabold">Compliance</h1></div><div class="bg-white p-8 rounded-3xl shadow border"><p><strong>Name:</strong> ${businessInfo.name}</p><p><strong>License:</strong> ${businessInfo.license}</p><p><strong>Address:</strong> ${businessInfo.address}</p></div></div>`;
-        }
-        function renderFaqView() {
-            return `<div class="max-w-4xl mx-auto px-4 py-12 space-y-8"><div class="text-center space-y-3"><h1 class="text-3xl font-extrabold">FAQs</h1></div><div class="space-y-4">${faqsData.map(f=>`<div class="bg-white p-6 rounded-2xl border"><h3 class="font-bold">${f.q}</h3><p class="text-sm mt-1">${f.a}</p></div>`).join('')}</div></div>`;
-        }
-        function renderContactView() {
-            return `<div class="max-w-3xl mx-auto px-4 py-12 text-center space-y-8"><h1 class="text-3xl font-extrabold">Contact Us</h1><a href="https://wa.me/91${siteSettings.whatsappNumber}" target="_blank" class="inline-block bg-emerald-600 text-white font-bold px-8 py-4 rounded-xl"><i class="fa-brands fa-whatsapp mr-2"></i> WhatsApp Support</a></div>`;
-        }
+        function renderSafetyView() { return `<div class="max-w-4xl mx-auto px-4 py-12 space-y-8"><div class="text-center space-y-3"><h1 class="text-3xl font-extrabold">Safety Centre</h1></div><div class="bg-white p-6 rounded-3xl shadow border"><h3>${safetyPointsData[0]?.title}</h3><p class="text-sm mt-2">${safetyPointsData[0]?.text}</p></div></div>`; }
+        function renderComplianceView() { return `<div class="max-w-4xl mx-auto px-4 py-12 space-y-8"><div class="text-center space-y-3"><h1 class="text-3xl font-extrabold">Compliance</h1></div><div class="bg-white p-8 rounded-3xl shadow border"><p><strong>Name:</strong> ${businessInfo.name}</p><p><strong>License:</strong> ${businessInfo.license}</p><p><strong>Address:</strong> ${businessInfo.address}</p></div></div>`; }
+        function renderFaqView() { return `<div class="max-w-4xl mx-auto px-4 py-12 space-y-8"><div class="text-center space-y-3"><h1 class="text-3xl font-extrabold">FAQs</h1></div><div class="space-y-4">${faqsData.map(f=>`<div class="bg-white p-6 rounded-2xl border"><h3 class="font-bold">${f.q}</h3><p class="text-sm mt-1">${f.a}</p></div>`).join('')}</div></div>`; }
+        function renderContactView() { return `<div class="max-w-3xl mx-auto px-4 py-12 text-center space-y-8"><h1 class="text-3xl font-extrabold">Contact Us</h1><a href="https://wa.me/91${siteSettings.whatsappNumber}" target="_blank" class="inline-block bg-emerald-600 text-white font-bold px-8 py-4 rounded-xl"><i class="fa-brands fa-whatsapp mr-2"></i> WhatsApp Support</a></div>`; }
 
-        // --- ADMIN PANEL ---
+        // --- FULL ADMIN PANEL ---
         function renderAdminView() {
             const categories = [{ key: 'all', name: 'All Products' }, ...categoriesList];
             let filteredInv = productsData;
@@ -807,18 +754,20 @@
                     </div>
 
                     <div class="flex space-x-2 overflow-x-auto pb-2 scrollbar-none border-b">
-                        <button onclick="setAdminTab('dashboard')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='dashboard'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Dashboard</button>
-                        <button onclick="setAdminTab('homepage')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='homepage'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Homepage CMS</button>
-                        <button onclick="setAdminTab('products')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='products'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Products</button>
-                        <button onclick="setAdminTab('categories')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='categories'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Categories</button>
-                        <button onclick="setAdminTab('featured')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='featured'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Featured</button>
-                        <button onclick="setAdminTab('faq')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='faq'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">FAQ</button>
-                        <button onclick="setAdminTab('timer')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='timer'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Timer</button>
-                        <button onclick="setAdminTab('settings')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='settings'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Business Settings</button>
-                        <button onclick="setAdminTab('team')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='team'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Team/Owner</button>
-                        <button onclick="setAdminTab('theme')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='theme'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Theme Config</button>
+                        <button onclick="setAdminTab('dashboard')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='dashboard'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Dashboard</button>
+                        <button onclick="setAdminTab('homepage')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='homepage'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Homepage CMS</button>
+                        <button onclick="setAdminTab('products')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='products'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Products</button>
+                        <button onclick="setAdminTab('categories')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='categories'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Categories</button>
+                        <button onclick="setAdminTab('featured')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='featured'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Featured</button>
+                        <button onclick="setAdminTab('faq')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='faq'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">FAQ</button>
+                        <button onclick="setAdminTab('timer')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='timer'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Timer</button>
+                        <button onclick="setAdminTab('settings')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='settings'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Business Settings</button>
+                        <button onclick="setAdminTab('team')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='team'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Team/Owner</button>
+                        <button onclick="setAdminTab('theme')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='theme'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Theme Config</button>
+                        <button onclick="setAdminTab('bulk')" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold ${currentAdminTab==='bulk'?'bg-theme-600 text-white':'bg-slate-100 text-slate-600'}">Excel Upload</button>
                     </div>
 
+                    <!-- 1. DASHBOARD -->
                     ${currentAdminTab === 'dashboard' ? `
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div class="bg-white p-6 rounded-2xl border"><span class="text-xs text-slate-400">Total Products</span><h3 class="text-2xl font-black">${productsData.length}</h3></div>
@@ -826,16 +775,23 @@
                         </div>
                     ` : ''}
 
+                    <!-- 2. HOMEPAGE CMS -->
                     ${currentAdminTab === 'homepage' ? `
                         <form onsubmit="handleHomepageCMSUpdate(event)" class="bg-white p-6 rounded-2xl border space-y-4 max-w-xl">
+                            <h3 class="font-bold border-b pb-2">Edit Homepage Content</h3>
                             <div><label class="text-xs font-bold">Brand Name</label><input type="text" id="cms-brand" value="${siteSettings.brandName}" class="w-full border rounded p-2 text-xs"></div>
                             <div><label class="text-xs font-bold">Subtitle (Store Type)</label><input type="text" id="cms-sub" value="${siteSettings.subtitle || ''}" class="w-full border rounded p-2 text-xs"></div>
                             <div><label class="text-xs font-bold">Logo URL</label><input type="text" id="cms-logo" value="${siteSettings.logoUrl}" class="w-full border rounded p-2 text-xs"></div>
                             <div><label class="text-xs font-bold">Hero Heading</label><input type="text" id="cms-h-head" value="${siteSettings.heroHeading}" class="w-full border rounded p-2 text-xs"></div>
-                            <button type="submit" class="bg-theme-600 text-white text-xs font-bold px-4 py-2 rounded">Save</button>
+                            <div><label class="text-xs font-bold">Hero Highlight Text</label><input type="text" id="cms-h-hi" value="${siteSettings.heroHighlight}" class="w-full border rounded p-2 text-xs"></div>
+                            <div><label class="text-xs font-bold">Hero Description</label><textarea id="cms-h-desc" rows="2" class="w-full border rounded p-2 text-xs">${siteSettings.heroDesc}</textarea></div>
+                            <div><label class="text-xs font-bold">Hero Image URL</label><input type="text" id="cms-h-img" value="${siteSettings.heroImage}" class="w-full border rounded p-2 text-xs"></div>
+                            <div><label class="text-xs font-bold">Background Image URL</label><input type="text" id="cms-h-bg" value="${siteSettings.heroBgImage}" class="w-full border rounded p-2 text-xs"></div>
+                            <button type="submit" class="bg-theme-600 text-white text-xs font-bold px-4 py-2 rounded">Save Homepage Settings</button>
                         </form>
                     ` : ''}
 
+                    <!-- 3. PRODUCTS -->
                     ${currentAdminTab === 'products' ? `
                         <div class="bg-white border rounded-2xl p-4 space-y-4">
                             <div class="flex justify-between items-center">
@@ -845,102 +801,177 @@
                             <div class="flex space-x-2 overflow-x-auto pb-2 scrollbar-none">${categories.map(c=>`<button onclick="setAdminCategoryTab('${c.key}')" class="px-2 py-1 rounded text-[10px] ${currentAdminCategoryTab===c.key?'bg-theme-600 text-white':'bg-slate-100'}">${c.name}</button>`).join('')}</div>
                             <div class="overflow-x-auto max-h-[500px]">
                                 <table class="w-full text-left text-xs">
-                                    <thead class="bg-slate-100"><tr><th class="p-2"><input type="checkbox" id="bulk-selectAll" onclick="toggleAllProducts(this)"></th><th class="p-2">Name</th><th class="p-2">Price</th><th class="p-2">Action</th></tr></thead>
+                                    <thead class="bg-slate-100"><tr><th class="p-2 w-8"><input type="checkbox" id="bulk-selectAll" onclick="toggleAllProducts(this)"></th><th class="p-2">Name</th><th class="p-2">Price</th><th class="p-2 text-right">Action</th></tr></thead>
                                     <tbody>
-                                        ${filteredInv.map(p => `<tr><td class="p-2 border-t"><input type="checkbox" class="bulk-prod-cb" value="${p.id}"></td><td class="p-2 border-t">${p.name}</td><td class="p-2 border-t">₹${p.price}</td><td class="p-2 border-t"><button onclick="openEditProductModal(${p.id})" class="text-blue-500 mr-2">Edit</button></td></tr>`).join('')}
+                                        ${filteredInv.map(p => `<tr><td class="p-2 border-t"><input type="checkbox" class="bulk-prod-cb" value="${p.id}"></td><td class="p-2 border-t font-bold truncate max-w-[150px]">${p.name}</td><td class="p-2 border-t">₹${p.price}</td><td class="p-2 border-t text-right"><button onclick="openEditProductModal(${p.id})" class="text-blue-500 font-bold px-2">Edit</button></td></tr>`).join('')}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     ` : ''}
 
-                    ${currentAdminTab === 'featured' ? `
-                        <div class="bg-white border rounded-2xl p-4 space-y-4">
-                            <h3 class="font-bold">Select Products for Homepage Feature</h3>
-                            <button onclick="saveFeatured()" class="bg-theme-600 text-white text-xs px-3 py-1.5 rounded">Save Featured</button>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                ${productsData.map(p => `<label class="flex items-center space-x-2 border p-2 rounded"><input type="checkbox" class="feat-cb" value="${p.id}" ${featuredProductIds.includes(p.id)?'checked':''}> <span class="text-xs truncate">${p.name}</span></label>`).join('')}
+                    <!-- 4. CATEGORIES -->
+                    ${currentAdminTab === 'categories' ? `
+                        <div class="bg-white border rounded-2xl p-6 max-w-xl space-y-4">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <h3 class="font-bold">Category Manager</h3>
+                                <button onclick="openAddCategoryModal()" class="bg-theme-600 text-white text-xs font-bold px-3 py-1.5 rounded">Add Category</button>
                             </div>
-                        </div>
-                    ` : ''}
-
-                    ${currentAdminTab === 'timer' ? `
-                        <form onsubmit="handleTimerSave(event)" class="bg-white p-6 rounded-2xl border space-y-4 max-w-sm">
-                            <h3 class="font-bold">Cart Expiry Timer Options</h3>
-                            <div><label class="flex items-center space-x-2 text-sm"><input type="checkbox" id="timer-en" ${timerData.enabled?'checked':''}> <span>Enable Cart Timer</span></label></div>
-                            <div><label class="text-xs font-bold">Minutes</label><input type="number" id="timer-mins" value="${timerData.minutes}" class="w-full border rounded p-2 text-xs"></div>
-                            <button type="submit" class="bg-theme-600 text-white text-xs font-bold px-4 py-2 rounded">Save Options</button>
-                        </form>
-                    ` : ''}
-
-                    ${currentAdminTab === 'team' ? `
-                        <div class="bg-white p-6 rounded-2xl border space-y-4">
-                            <div class="flex justify-between items-center">
-                                <h3 class="font-bold">Team / Owner Section</h3>
-                                <label class="flex items-center space-x-2"><input type="checkbox" id="team-en" ${ownerData.enabled?'checked':''} onchange="toggleTeamSection(this.checked)"> <span class="text-xs font-bold">Show on Website</span></label>
-                            </div>
-                            <button onclick="addOwner()" class="bg-theme-600 text-white text-[10px] px-3 py-1.5 rounded">Add Member</button>
-                            <div class="space-y-2">
-                                ${ownerData.owners.map((o, i) => `
-                                    <div class="border p-3 rounded flex justify-between items-center">
-                                        <div class="flex items-center space-x-3"><img src="${o.image}" class="w-10 h-10 rounded-full"><div><p class="text-xs font-bold">${o.name}</p><p class="text-[10px]">${o.role}</p></div></div>
-                                        <div><button onclick="editOwner(${i})" class="text-blue-500 mr-2 text-xs">Edit</button><button onclick="deleteOwner(${i})" class="text-red-500 text-xs">Delete</button></div>
+                            <div class="space-y-3">
+                                ${categoriesList.map(c => `
+                                    <div class="flex items-center justify-between p-3 border rounded-xl bg-slate-50">
+                                        <div class="flex items-center space-x-3"><img src="${c.image}" class="w-10 h-10 rounded object-cover"><div><h4 class="font-bold text-xs">${c.name}</h4><span class="text-[9px] text-slate-400">${c.key}</span></div></div>
+                                        <div><button onclick="editCategory('${c.key}')" class="text-blue-500 px-2"><i class="fa-solid fa-pen"></i></button><button onclick="deleteCategory('${c.key}')" class="text-red-500 px-2"><i class="fa-solid fa-trash"></i></button></div>
                                     </div>
                                 `).join('')}
                             </div>
                         </div>
                     ` : ''}
 
+                    <!-- 5. FEATURED -->
+                    ${currentAdminTab === 'featured' ? `
+                        <div class="bg-white border rounded-2xl p-6 space-y-4 max-w-3xl">
+                            <h3 class="font-bold border-b pb-2">Select Homepage Featured Products</h3>
+                            <button onclick="saveFeatured()" class="bg-theme-600 text-white text-xs px-4 py-2 rounded font-bold">Save Featured Layout</button>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                ${productsData.map(p => `<label class="flex items-center space-x-2 border p-2 rounded cursor-pointer hover:bg-slate-50"><input type="checkbox" class="feat-cb" value="${p.id}" ${featuredProductIds.includes(p.id)?'checked':''}> <span class="text-xs truncate font-medium">${p.name}</span></label>`).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- 6. FAQ -->
+                    ${currentAdminTab === 'faq' ? `
+                        <div class="bg-white border rounded-2xl p-6 space-y-4 max-w-xl">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <h3 class="font-bold">FAQ Manager</h3>
+                                <button onclick="openAddFaqModal()" class="bg-theme-600 text-white text-xs font-bold px-3 py-1.5 rounded">Add FAQ</button>
+                            </div>
+                            <div class="space-y-3">
+                                ${faqsData.map((f, idx) => `
+                                    <div class="p-3 border rounded-xl bg-slate-50 relative pr-10">
+                                        <h4 class="font-bold text-xs">${f.q}</h4>
+                                        <p class="text-[11px] text-slate-500 mt-1">${f.a}</p>
+                                        <button onclick="deleteFaq(${idx})" class="absolute top-3 right-3 text-red-500"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- 7. TIMER -->
+                    ${currentAdminTab === 'timer' ? `
+                        <form onsubmit="handleTimerSave(event)" class="bg-white p-6 rounded-2xl border space-y-4 max-w-sm">
+                            <h3 class="font-bold border-b pb-2">Cart Expiry Timer Options</h3>
+                            <div><label class="flex items-center space-x-2 text-sm"><input type="checkbox" id="timer-en" ${timerData.enabled?'checked':''}> <span>Enable Cart Timer</span></label></div>
+                            <div><label class="text-xs font-bold">Reservation Minutes</label><input type="number" id="timer-mins" value="${timerData.minutes}" class="w-full border rounded p-2 text-xs"></div>
+                            <button type="submit" class="bg-theme-600 text-white text-xs font-bold px-4 py-2 rounded">Save Timer Options</button>
+                        </form>
+                    ` : ''}
+
+                    <!-- 8. BUSINESS SETTINGS -->
+                    ${currentAdminTab === 'settings' ? `
+                        <form onsubmit="handleAdminBusinessUpdate(event)" class="bg-white p-6 rounded-2xl border space-y-4 max-w-xl">
+                            <h3 class="font-bold border-b pb-2">Business & WhatsApp Settings</h3>
+                            <div><label class="text-xs font-bold">Business Full Name</label><input type="text" id="admin-bus-name" value="${businessInfo.name}" class="w-full border rounded p-2 text-xs"></div>
+                            <div><label class="text-xs font-bold">License Number</label><input type="text" id="admin-bus-license" value="${businessInfo.license}" class="w-full border rounded p-2 text-xs"></div>
+                            <div><label class="text-xs font-bold">Registered Address</label><textarea id="admin-bus-address" class="w-full border rounded p-2 text-xs">${businessInfo.address}</textarea></div>
+                            <div><label class="text-xs font-bold text-emerald-600">WhatsApp Number (e.g. 9658399991)</label><input type="text" id="admin-bus-contact" value="${siteSettings.whatsappNumber}" class="w-full border rounded p-2 text-xs"></div>
+                            <button type="submit" class="bg-theme-600 text-white text-xs font-bold px-4 py-2 rounded">Save Settings</button>
+                        </form>
+                    ` : ''}
+
+                    <!-- 9. TEAM / OWNER -->
+                    ${currentAdminTab === 'team' ? `
+                        <div class="bg-white p-6 rounded-2xl border space-y-4 max-w-xl">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <h3 class="font-bold">Team / Owner Section</h3>
+                                <label class="flex items-center space-x-2"><input type="checkbox" id="team-en" ${ownerData.enabled?'checked':''} onchange="toggleTeamSection(this.checked)"> <span class="text-xs font-bold text-theme-600">Enable on Website</span></label>
+                            </div>
+                            <button onclick="addOwner()" class="bg-theme-600 text-white text-[10px] px-3 py-1.5 rounded font-bold">Add Team Member</button>
+                            <div class="space-y-3">
+                                ${ownerData.owners.map((o, i) => `
+                                    <div class="border p-3 rounded-xl flex justify-between items-center bg-slate-50">
+                                        <div class="flex items-center space-x-3"><img src="${o.image}" class="w-12 h-12 rounded-full object-cover"><div><p class="text-xs font-bold">${o.name}</p><p class="text-[10px] text-slate-500">${o.role}</p></div></div>
+                                        <div class="flex flex-col space-y-2"><button onclick="editOwner(${i})" class="text-blue-500 text-xs font-bold">Edit</button><button onclick="deleteOwner(${i})" class="text-red-500 text-xs font-bold">Delete</button></div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- 10. THEME SETUP -->
                     ${currentAdminTab === 'theme' ? `
-                        <div class="bg-white border rounded-2xl p-6 max-w-xl">
-                            <h3 class="font-bold mb-4">Choose Website Color Theme</h3>
+                        <div class="bg-white border rounded-2xl p-6 max-w-xl space-y-4">
+                            <h3 class="font-bold border-b pb-2">Choose Website Color Theme</h3>
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                 ${Object.keys(PREDEFINED_PALETTES).map(key => {
                                     const p = PREDEFINED_PALETTES[key];
-                                    return `<button onclick="setThemePalette('${key}')" class="border p-3 rounded-xl flex items-center space-x-3 hover:bg-slate-50 ${themeSettings.paletteId === key ? 'border-theme-600 ring-2 ring-theme-200' : 'border-slate-200'}"><div class="w-6 h-6 rounded-full" style="background-color: ${p.vars['600']}"></div><span class="text-xs font-bold">${p.name}</span></button>`;
+                                    return `<button onclick="setThemePalette('${key}')" class="border p-3 rounded-xl flex flex-col items-center justify-center space-y-2 hover:bg-slate-50 ${themeSettings.paletteId === key ? 'border-theme-600 ring-2 ring-theme-200 bg-theme-50' : 'border-slate-200'}"><div class="w-8 h-8 rounded-full shadow-md" style="background-color: ${p.vars['600']}"></div><span class="text-xs font-bold">${p.name}</span></button>`;
                                 }).join('')}
                             </div>
                         </div>
                     ` : ''}
-                    
-                    <!-- Include other existing admin tabs (Categories, FAQ, Settings) similarly compressed -->
+
+                    <!-- 11. BULK EXCEL UPLOAD -->
+                    ${currentAdminTab === 'bulk' ? `
+                        <div class="bg-white border rounded-2xl p-6 max-w-xl space-y-4">
+                            <h3 class="font-bold border-b pb-2"><i class="fa-solid fa-file-excel text-emerald-600 mr-2"></i> Excel Bulk Product Upload</h3>
+                            <p class="text-xs text-slate-500">Download the Excel template, fill in your products, and upload it to instantly populate your store inventory.</p>
+                            <button onclick="downloadExcelTemplate()" class="bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 w-full py-2.5 rounded-lg text-xs font-bold flex items-center justify-center"><i class="fa-solid fa-download mr-2 text-theme-600"></i> Download Template (.xlsx)</button>
+                            <div class="py-2"><label class="block text-xs font-bold mb-1">Select Filled Excel File:</label><input type="file" id="excel-file-input" accept=".xlsx, .xls" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-theme-50 file:text-theme-700"></div>
+                            <button onclick="handleExcelBulkImport()" class="bg-emerald-600 hover:bg-emerald-700 text-white w-full py-3 rounded-lg text-xs font-bold uppercase tracking-wider">Import Products</button>
+                        </div>
+                    ` : ''}
                 </div>
 
-                <!-- Admin Modals for Products omitted for brevity in summary, but functional via standard JS -->
+                <!-- Admin Modal for Add/Edit Product -->
                 <div id="admin-product-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="document.getElementById('admin-product-modal').classList.add('hidden')"></div>
-                    <div class="relative bg-white w-full max-w-lg rounded-xl p-6 space-y-4">
-                        <h3 class="font-bold">Edit Product</h3>
+                    <div class="relative bg-white w-full max-w-lg rounded-2xl p-6 space-y-4 shadow-2xl">
+                        <div class="flex justify-between"><h3 class="font-bold">Product Form</h3><button onclick="document.getElementById('admin-product-modal').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button></div>
                         <form id="admin-product-form" onsubmit="handleProductSaveForm(event)" class="space-y-3 text-xs">
                             <input type="hidden" id="edit-prod-id">
-                            <input type="text" id="edit-prod-name" placeholder="Name" class="w-full border p-2 rounded" required>
-                            <input type="number" id="edit-prod-price" placeholder="Price" class="w-full border p-2 rounded" required>
-                            <input type="number" id="edit-prod-discount" placeholder="Discount %" class="w-full border p-2 rounded">
-                            <input type="text" id="edit-prod-unit" placeholder="Unit" class="w-full border p-2 rounded">
-                            <input type="text" id="edit-prod-image" placeholder="Image URL" class="w-full border p-2 rounded">
-                            <textarea id="edit-prod-desc" placeholder="Desc" class="w-full border p-2 rounded"></textarea>
-                            <select id="edit-prod-cat" class="w-full border p-2 rounded">${categoriesList.map(c=>`<option value="${c.key}">${c.name}</option>`).join('')}</select>
-                            <button type="submit" class="w-full bg-theme-600 text-white p-2 rounded font-bold">Save Product</button>
+                            <div><label class="font-bold mb-1 block">Name</label><input type="text" id="edit-prod-name" class="w-full border p-2 rounded bg-slate-50" required></div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div><label class="font-bold mb-1 block">Price (₹)</label><input type="number" id="edit-prod-price" class="w-full border p-2 rounded bg-slate-50" required></div>
+                                <div><label class="font-bold mb-1 block">Discount %</label><input type="number" id="edit-prod-discount" class="w-full border p-2 rounded bg-slate-50"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div><label class="font-bold mb-1 block">Unit (e.g. Box)</label><input type="text" id="edit-prod-unit" class="w-full border p-2 rounded bg-slate-50"></div>
+                                <div><label class="font-bold mb-1 block">Category</label><select id="edit-prod-cat" class="w-full border p-2 rounded bg-slate-50">${categoriesList.map(c=>`<option value="${c.key}">${c.name}</option>`).join('')}</select></div>
+                            </div>
+                            <div><label class="font-bold mb-1 block">Image URL</label><input type="text" id="edit-prod-image" class="w-full border p-2 rounded bg-slate-50"></div>
+                            <div><label class="font-bold mb-1 block">Description</label><textarea id="edit-prod-desc" class="w-full border p-2 rounded bg-slate-50"></textarea></div>
+                            <button type="submit" class="w-full bg-theme-600 text-white p-3 rounded-lg font-bold uppercase mt-2">Save Product</button>
                         </form>
                     </div>
                 </div>
             `;
         }
 
-        // --- Admin JS Functions ---
+        // --- ADMIN JS LOGIC ---
         function setAdminTab(t) { currentAdminTab = t; router.render(); }
         function setAdminCategoryTab(k) { currentAdminCategoryTab = k; router.render(); }
 
+        // Homepage Updates
         function handleHomepageCMSUpdate(e) {
             e.preventDefault();
             siteSettings.brandName = document.getElementById('cms-brand').value;
             siteSettings.subtitle = document.getElementById('cms-sub').value;
             siteSettings.logoUrl = document.getElementById('cms-logo').value;
             siteSettings.heroHeading = document.getElementById('cms-h-head').value;
+            siteSettings.heroHighlight = document.getElementById('cms-h-hi').value;
+            siteSettings.heroDesc = document.getElementById('cms-h-desc').value;
+            siteSettings.heroImage = document.getElementById('cms-h-img').value;
+            siteSettings.heroBgImage = document.getElementById('cms-h-bg').value;
             syncChangesToCloud(); router.render();
+            document.getElementById('brand-title-header').innerText = siteSettings.brandName;
+            document.getElementById('brand-subtitle-header').innerText = siteSettings.subtitle;
+            const lg = document.getElementById('brand-logo-container');
+            if(siteSettings.logoUrl) lg.innerHTML = `<img src="${siteSettings.logoUrl}" class="w-full h-full object-cover">`;
         }
 
-        // Product Modal Logic
+        // Product Manager Logic
         function openAddProductModal() { document.getElementById('admin-product-form').reset(); document.getElementById('edit-prod-id').value = ''; document.getElementById('admin-product-modal').classList.remove('hidden'); }
         function openEditProductModal(id) {
             const p = productsData.find(x => x.id == id); if(!p) return;
@@ -961,40 +992,75 @@
                 name: document.getElementById('edit-prod-name').value, price: parseFloat(document.getElementById('edit-prod-price').value),
                 discount: parseFloat(document.getElementById('edit-prod-discount').value)||0, unit: document.getElementById('edit-prod-unit').value,
                 image: document.getElementById('edit-prod-image').value, desc: document.getElementById('edit-prod-desc').value,
-                category: document.getElementById('edit-prod-cat').value, specs: "Standard", safety: "Adult supervision required"
+                category: document.getElementById('edit-prod-cat').value, specs: "Standard Grade", safety: "Adult supervision required"
             };
             if(id) { const p = productsData.find(x=>x.id==id); Object.assign(p, pd); }
-            else { pd.id = Date.now(); productsData.push(pd); }
+            else { pd.id = Date.now(); productsData.unshift(pd); }
             document.getElementById('admin-product-modal').classList.add('hidden');
             syncChangesToCloud(); router.render();
         }
 
-        // Bulk Delete
+        // Bulk Delete Logic
         function toggleAllProducts(el) { document.querySelectorAll('.bulk-prod-cb').forEach(cb => cb.checked = el.checked); }
         function bulkDeleteProducts() {
             const ids = Array.from(document.querySelectorAll('.bulk-prod-cb:checked')).map(cb => parseInt(cb.value));
             if(ids.length === 0) return showToast("Select products to delete", "error");
-            if(confirm(`Delete ${ids.length} products?`)) {
+            if(confirm(`Delete ${ids.length} products entirely?`)) {
                 productsData = productsData.filter(p => !ids.includes(p.id));
-                syncChangesToCloud(); router.render(); showToast("Deleted successfully");
+                syncChangesToCloud(); router.render(); showToast("Deleted successfully!");
             }
         }
 
-        // Featured Manager
+        // Category Manager Logic
+        function openAddCategoryModal() {
+            const n = prompt("Enter new category name:"); if (!n) return;
+            const k = n.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            const img = prompt("Enter category image URL:", "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400");
+            if (!categoriesList.some(c => c.key === k)) {
+                categoriesList.push({ key: k, name: n, image: img || "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" });
+                syncChangesToCloud(); router.render(); showToast("Category Added!");
+            } else { showToast("Category key already exists!", "error"); }
+        }
+        function editCategory(k) {
+            const c = categoriesList.find(x => x.key === k); if(!c) return;
+            const n = prompt("Edit name:", c.name); if(n) c.name = n;
+            const im = prompt("Edit image URL:", c.image); if(im) c.image = im;
+            syncChangesToCloud(); router.render();
+        }
+        function deleteCategory(k) { if(confirm("Delete category?")) { categoriesList = categoriesList.filter(x => x.key !== k); syncChangesToCloud(); router.render(); } }
+
+        // Featured Manager Logic
         function saveFeatured() {
             featuredProductIds = Array.from(document.querySelectorAll('.feat-cb:checked')).map(cb => parseInt(cb.value));
-            syncChangesToCloud(); showToast("Featured saved!");
+            syncChangesToCloud(); showToast("Featured selection saved!");
         }
 
-        // Timer Options
+        // FAQ Manager Logic
+        function openAddFaqModal() {
+            const q = prompt("Question:"); if (!q) return;
+            const a = prompt("Answer:"); if(a) { faqsData.push({q, a}); syncChangesToCloud(); router.render(); showToast("FAQ Added"); }
+        }
+        function deleteFaq(idx) { if(confirm("Delete FAQ?")) { faqsData.splice(idx,1); syncChangesToCloud(); router.render(); } }
+
+        // Timer Options Logic
         function handleTimerSave(e) {
             e.preventDefault();
             timerData.enabled = document.getElementById('timer-en').checked;
             timerData.minutes = parseInt(document.getElementById('timer-mins').value) || 10;
-            syncChangesToCloud(); showToast("Timer options saved");
+            syncChangesToCloud(); showToast("Cart timer configuration saved.");
         }
 
-        // Team / Owner Manager
+        // Settings Manager Logic
+        function handleAdminBusinessUpdate(e) {
+            e.preventDefault();
+            businessInfo.name = document.getElementById('admin-bus-name').value;
+            businessInfo.license = document.getElementById('admin-bus-license').value;
+            businessInfo.address = document.getElementById('admin-bus-address').value;
+            siteSettings.whatsappNumber = document.getElementById('admin-bus-contact').value.replace(/[^0-9]/g, '');
+            syncChangesToCloud(); router.render(); showToast("Settings Updated!");
+        }
+
+        // Team / Owner Manager Logic
         function toggleTeamSection(val) { ownerData.enabled = val; syncChangesToCloud(); }
         function addOwner() {
             const n = prompt("Name:"); if(!n) return;
@@ -1011,13 +1077,46 @@
         }
         function deleteOwner(i) { if(confirm("Delete member?")) { ownerData.owners.splice(i,1); syncChangesToCloud(); router.render(); } }
 
-        // Theme Setup
+        // Theme Setup Logic
         function setThemePalette(key) {
             themeSettings.paletteId = key;
-            applyTheme(key);
-            syncChangesToCloud();
-            router.render();
-            showToast("Color Theme Updated!");
+            applyTheme(key); syncChangesToCloud(); router.render(); showToast("Color Theme Applied & Saved!");
+        }
+
+        // Excel Bulk Logic
+        function downloadExcelTemplate() {
+            const temp = [ { name: "Sample Product", category: "sparkles", price: 150, discount: 5, unit: "1 Box", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400", desc: "Test description" } ];
+            const ws = XLSX.utils.json_to_sheet(temp);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Products");
+            XLSX.writeFile(wb, "SK_Crackers_Products_Template.xlsx");
+            showToast("Excel template downloaded!");
+        }
+        function handleExcelBulkImport() {
+            const fileInput = document.getElementById('excel-file-input');
+            if (!fileInput.files || fileInput.files.length === 0) return showToast("Select an Excel file first", "error");
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const wb = XLSX.read(data, { type: 'array' });
+                    const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                    
+                    if (json && json.length > 0) {
+                        const formatted = json.map((i, idx) => ({
+                            id: Date.now() + idx, name: i.name || "Unnamed", category: i.category || "sparkles",
+                            price: parseFloat(i.price) || 100, discount: parseFloat(i.discount) || 0,
+                            unit: i.unit || "1 Box", image: i.image || "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400",
+                            desc: i.desc || "", specs: "Standard", safety: "Adult supervision required"
+                        }));
+                        productsData = [...formatted, ...productsData];
+                        syncChangesToCloud(); router.render();
+                        showToast(`Successfully imported ${formatted.length} products!`);
+                    } else { showToast("File is empty.", "error"); }
+                } catch(err) { showToast("Excel parse error.", "error"); }
+            };
+            reader.readAsArrayBuffer(fileInput.files[0]);
         }
 
         // Cloud DB Sync (Supabase API)
@@ -1036,7 +1135,6 @@
                     if(data.themeSettings) themeSettings = data.themeSettings;
                     
                     applyTheme(themeSettings.paletteId || 'amber');
-                    
                     if(siteSettings.brandName) document.getElementById('brand-title-header').innerText = siteSettings.brandName;
                     if(siteSettings.subtitle) document.getElementById('brand-subtitle-header').innerText = siteSettings.subtitle;
                     if(siteSettings.logoUrl) document.getElementById('brand-logo-container').innerHTML = `<img src="${siteSettings.logoUrl}" class="w-full h-full object-cover">`;
@@ -1060,7 +1158,7 @@
         }
 
         window.onload = async function() {
-            applyTheme('amber'); // default init
+            applyTheme('amber'); // setup CSS variables default
             await loadDataFromSupabase();
             const hash = window.location.hash.replace('#', '');
             if(hash === 'admin') router.navigate('admin');
