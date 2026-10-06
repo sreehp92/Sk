@@ -412,7 +412,8 @@
             popupMessage: "Welcome to SK Crackers! Get flat 30% OFF on all Family Gift Boxes.",
             scrollEnabled: true,
             scrollMessage: "🎉 Mega Diwali Sale! Up to 30% OFF on all Family Packs. Order Now! 🎉",
-            scrollSpeed: 15
+            scrollSpeed: 15,
+            scrollFontSize: "text-xs"
 
         };
 
@@ -2305,50 +2306,51 @@
 
                                 </div>
 
-                                <!-- Popup & Scroll Settings -->
+                              <!-- Popup & Scroll Settings -->
                                 <div class="col-span-full border-t border-slate-200 dark:border-slate-700 pt-4 mt-2">
                                     <h4 class="font-bold text-sm text-amber-600 mb-3">Popup & Scrolling Announcements</h4>
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-xs font-semibold mb-1">Enable Popup?</label>
                                         <select id="cms-popup-enabled" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">
-                                            <option value="true">Yes, Show Popup</option>
-                                            <option value="false">No, Hide Popup</option>
+                                            <option value="true" ${siteSettings.popupEnabled ? 'selected' : ''}>Yes, Show Popup</option>
+                                            <option value="false" ${!siteSettings.popupEnabled ? 'selected' : ''}>No, Hide Popup</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold mb-1">Enable Scrolling Text?</label>
                                         <select id="cms-scroll-enabled" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">
-                                            <option value="true">Yes, Show Scroll</option>
-                                            <option value="false">No, Hide Scroll</option>
+                                            <option value="true" ${siteSettings.scrollEnabled ? 'selected' : ''}>Yes, Show Scroll</option>
+                                            <option value="false" ${!siteSettings.scrollEnabled ? 'selected' : ''}>No, Hide Scroll</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold mb-1">Popup Message</label>
-                                    <textarea id="cms-popup-msg" rows="2" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs"></textarea>
+                                    <textarea id="cms-popup-msg" rows="2" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">${siteSettings.popupMessage || ''}</textarea>
                                 </div>
-                                <div class="grid grid-cols-3 gap-2">
-                                    <div class="col-span-2">
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                    <div class="sm:col-span-2">
                                         <label class="block text-xs font-semibold mb-1">Scrolling Text Message</label>
-                                        <input type="text" id="cms-scroll-msg" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                                        <input type="text" id="cms-scroll-msg" value="${siteSettings.scrollMessage || ''}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold mb-1">Scroll Speed (Sec)</label>
-                                        <input type="number" id="cms-scroll-speed" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs" title="Lower = Faster">
+                                        <input type="number" id="cms-scroll-speed" value="${siteSettings.scrollSpeed || 15}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs" title="Lower = Faster">
                                     </div>
                                 </div>
-
-                                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition">Save Homepage & Background</button>
-
-                            </form>
-
-                        </div>
-
-                    </div>
-
-
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1">Scroll Text Font Size</label>
+                                        <select id="cms-scroll-fontsize" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">
+                                            <option value="text-[10px]" ${siteSettings.scrollFontSize === 'text-[10px]' ? 'selected' : ''}>Small (10px)</option>
+                                            <option value="text-xs" ${siteSettings.scrollFontSize === 'text-xs' ? 'selected' : ''}>Normal (XS)</option>
+                                            <option value="text-sm" ${siteSettings.scrollFontSize === 'text-sm' ? 'selected' : ''}>Medium (SM)</option>
+                                            <option value="text-base" ${siteSettings.scrollFontSize === 'text-base' ? 'selected' : ''}>Large (Base)</option>
+                                        </select>
+                                    </div>
+                                </div>
 
                     <!-- TAB 3: PRODUCT MANAGER -->
 
@@ -2821,6 +2823,7 @@
             siteSettings.popupMessage = document.getElementById('cms-popup-msg').value;
             siteSettings.scrollMessage = document.getElementById('cms-scroll-msg').value;
             siteSettings.scrollSpeed = parseInt(document.getElementById('cms-scroll-speed').value) || 15;
+            siteSettings.scrollFontSize = document.getElementById('cms-scroll-fontsize').value;
 
             siteSettings.heroBgImage = document.getElementById('cms-hero-bg-image').value;
 
@@ -2857,6 +2860,7 @@
         }
 
         function applyDynamicSettings() {
+            // Update Admin Fields if inside Admin Panel
             const pEn = document.getElementById('cms-popup-enabled');
             if (pEn) {
                 pEn.value = siteSettings.popupEnabled ? 'true' : 'false';
@@ -2864,15 +2868,21 @@
                 document.getElementById('cms-popup-msg').value = siteSettings.popupMessage || '';
                 document.getElementById('cms-scroll-msg').value = siteSettings.scrollMessage || '';
                 document.getElementById('cms-scroll-speed').value = siteSettings.scrollSpeed || 15;
+                const fsSelect = document.getElementById('cms-scroll-fontsize');
+                if(fsSelect) fsSelect.value = siteSettings.scrollFontSize || 'text-xs';
             }
 
+            // Scroll Bar Logic for Frontend & Mobile View
             const scrollBar = document.getElementById('dynamic-scroll-bar');
             const scrollText = document.getElementById('dynamic-scroll-text');
             if(scrollBar && scrollText) {
                 if(siteSettings.scrollEnabled) {
                     scrollBar.classList.remove('hidden');
                     scrollText.innerText = siteSettings.scrollMessage;
-                    scrollText.style.animationDuration = siteSettings.scrollSpeed + 's';
+                    scrollText.style.animationDuration = (siteSettings.scrollSpeed || 15) + 's';
+                    
+                    // Apply dynamic font size & mobile friendly classes
+                    scrollBar.className = `bg-gradient-to-r from-amber-600 to-red-600 text-white font-bold py-1.5 marquee-container z-50 relative ${siteSettings.scrollFontSize || 'text-xs'}`;
                 } else {
                     scrollBar.classList.add('hidden');
                 }
