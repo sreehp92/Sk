@@ -97,7 +97,20 @@
             background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.90)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600') center/cover no-repeat;
 
         }
-
+/* Popup Smooth Animations */
+        .popup-overlay-active { opacity: 1; visibility: visible; }
+        .popup-overlay-hidden { opacity: 0; visibility: hidden; transition: all 0.3s ease-in-out; }
+        
+        .popup-box-active { 
+            transform: scale(1) translateY(0); 
+            opacity: 1; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .popup-box-hidden { 
+            transform: scale(0.9) translateY(20px); 
+            opacity: 0; 
+            transition: all 0.3s ease-in-out; 
+        }
     </style>
 
 </head>
@@ -108,7 +121,28 @@
 
     <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
+<!-- Animated Promo Popup Modal -->
+    <div id="popup-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center popup-overlay-hidden p-4" onclick="if(event.target === this) closePopup();">
+        <div id="popup-box" class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md p-6 sm:p-8 text-center relative border-t-4 border-amber-500 popup-box-hidden">
+            <!-- Close Button (X) -->
+            <button onclick="closePopup()" class="absolute top-4 right-5 text-slate-400 hover:text-red-500 transition text-2xl" title="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
 
+            <!-- Media Container (Image or Icon) -->
+            <div id="popup-media-container" class="mb-4 flex justify-center"></div>
+
+            <!-- Title -->
+            <h3 id="popup-title-text" class="text-xl sm:text-2xl font-extrabold text-slate-800 dark:text-white mb-2"></h3>
+            
+            <!-- Message Content -->
+            <p id="popup-message-text" class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mb-6 leading-relaxed"></p>
+
+            <!-- Action Button -->
+            <button id="popup-action-btn" onclick="handlePopupAction()" class="w-full bg-gradient-to-r from-amber-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-500/30 transition transform hover:-translate-y-0.5 text-xs sm:text-sm uppercase tracking-wider">
+            </button>
+        </div>
+    </div>
 
     <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
 
@@ -356,11 +390,16 @@
 
             heroBgImage: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600",
 
-            whatsappNumber: "9658399991"
+            whatsappNumber: "9658399991",
+            // Popup Settings
+            popupEnabled: true,
+            popupTitle: "Special Diwali Offer!",
+            popupDesc: "Welcome to SK Crackers! Get flat 30% OFF on all Family Gift Boxes. Limited time offer exclusively for you.",
+            popupImage: "",
+            popupBtnText: "Claim Offer Now",
+            popupAction: "catalogue"
 
         };
-
-
 
         let businessInfo = {
 
@@ -468,7 +507,65 @@
 
         let currentAdminCategoryTab = 'all';
 
+// --- POPUP CONTROLLER FUNCTIONS ---
+        function renderPopupContent() {
+            const media = document.getElementById('popup-media-container');
+            const title = document.getElementById('popup-title-text');
+            const desc = document.getElementById('popup-message-text');
+            const btn = document.getElementById('popup-action-btn');
 
+            if (!title) return;
+
+            title.innerText = siteSettings.popupTitle || "Special Offer!";
+            desc.innerText = siteSettings.popupDesc || "";
+            btn.innerText = siteSettings.popupBtnText || "Claim Offer Now";
+
+            if (siteSettings.popupImage && siteSettings.popupImage.trim() !== '') {
+                media.innerHTML = `<img src="${siteSettings.popupImage}" class="h-28 w-full object-cover rounded-2xl shadow-md border border-slate-200 dark:border-slate-800" onerror="this.src='https://placehold.co/400x200/1e293b/f8fafc?text=Offer'">`;
+            } else {
+                media.innerHTML = `
+                    <div class="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 text-amber-600 rounded-2xl flex items-center justify-center shadow-inner">
+                        <i class="fa-solid fa-gift text-3xl"></i>
+                    </div>`;
+            }
+        }
+
+        function openPopup() {
+            renderPopupContent();
+            const overlay = document.getElementById('popup-overlay');
+            const box = document.getElementById('popup-box');
+            if (!overlay || !box) return;
+
+            overlay.classList.remove('popup-overlay-hidden');
+            overlay.classList.add('popup-overlay-active');
+            setTimeout(() => {
+                box.classList.remove('popup-box-hidden');
+                box.classList.add('popup-box-active');
+            }, 20);
+        }
+
+        function closePopup() {
+            const overlay = document.getElementById('popup-overlay');
+            const box = document.getElementById('popup-box');
+            if (!overlay || !box) return;
+
+            box.classList.remove('popup-box-active');
+            box.classList.add('popup-box-hidden');
+            setTimeout(() => {
+                overlay.classList.remove('popup-overlay-active');
+                overlay.classList.add('popup-overlay-hidden');
+            }, 300);
+        }
+
+        function handlePopupAction() {
+            closePopup();
+            if (siteSettings.popupAction === 'whatsapp') {
+                const message = encodeURIComponent(`Hello ${siteSettings.brandName}, I saw your special Diwali offer on the website and want to enquire!`);
+                window.open(`https://wa.me/91${siteSettings.whatsappNumber.replace(/\D/g, '')}?text=${message}`, '_blank');
+            } else {
+                router.navigate('catalogue');
+            }
+        }
 
         // Toast Notification System
 
@@ -2228,6 +2325,52 @@
 
                                 </div>
 
+<!-- Entrance Popup CMS Settings -->
+                                <div class="border-t border-slate-200 dark:border-slate-800 pt-5 mt-5 space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-bold text-sm text-amber-600 flex items-center">
+                                            <i class="fa-solid fa-bullhorn mr-2"></i> Entrance Welcome Popup Settings
+                                        </h4>
+                                        <button type="button" onclick="openPopup()" class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-200">
+                                            <i class="fa-solid fa-eye mr-1"></i> Test Popup
+                                        </button>
+                                    </div>
+
+                                    <div class="flex items-center space-x-2 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                                        <input type="checkbox" id="cms-popup-enabled" ${siteSettings.popupEnabled ? 'checked' : ''} class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                                        <label for="cms-popup-enabled" class="text-xs font-bold cursor-pointer">Enable Popup on Website Load</label>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1">Popup Heading / Title</label>
+                                        <input type="text" id="cms-popup-title" value="${siteSettings.popupTitle || ''}" placeholder="e.g. Special Diwali Offer!" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1">Popup Offer Description Text</label>
+                                        <textarea id="cms-popup-desc" rows="3" placeholder="Enter promotion text..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">${siteSettings.popupDesc || ''}</textarea>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1">Popup Banner Image URL (Optional)</label>
+                                        <input type="text" id="cms-popup-image" value="${siteSettings.popupImage || ''}" placeholder="https://... (Leave blank for Gift Icon)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-semibold mb-1">Button Label</label>
+                                            <input type="text" id="cms-popup-btn" value="${siteSettings.popupBtnText || 'Claim Offer Now'}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold mb-1">Button Click Action</label>
+                                            <select id="cms-popup-action" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                                                <option value="catalogue" ${siteSettings.popupAction === 'catalogue' ? 'selected' : ''}>Navigate to Shop Products</option>
+                                                <option value="whatsapp" ${siteSettings.popupAction === 'whatsapp' ? 'selected' : ''}>Open WhatsApp Direct Message</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition">Save Homepage & Background</button>
 
                             </form>
@@ -2706,7 +2849,13 @@
 
             siteSettings.heroBgImage = document.getElementById('cms-hero-bg-image').value;
 
-
+// Popup Settings Update
+            siteSettings.popupEnabled = document.getElementById('cms-popup-enabled').checked;
+            siteSettings.popupTitle = document.getElementById('cms-popup-title').value;
+            siteSettings.popupDesc = document.getElementById('cms-popup-desc').value;
+            siteSettings.popupImage = document.getElementById('cms-popup-image').value;
+            siteSettings.popupBtnText = document.getElementById('cms-popup-btn').value;
+            siteSettings.popupAction = document.getElementById('cms-popup-action').value;
 
             const headerBrand = document.getElementById('brand-title-header');
 
@@ -3377,19 +3526,18 @@
 
 
         window.onload = async function() {
-
             await loadDataFromSupabase();
-
             if (window.location.hash === '#admin') {
-
                 router.navigate('admin');
-
             } else {
-
                 router.navigate('home');
-
+                
+                setTimeout(() => {
+                    if (siteSettings.popupEnabled) {
+                        openPopup();
+                    }
+                }, 600);
             }
-
         };
 
     </script>
