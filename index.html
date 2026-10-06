@@ -2819,61 +2819,80 @@
 
 
 
-        function handleHomepageCMSUpdate(e) {
-            e.preventDefault();
-            
-            // Safe assignment (ஒவ்வொரு இன்புட்டும் இருக்கிறதா என்று செக் செய்து சேவ் செய்யும்)
-            const brandEl = document.getElementById('cms-brand-name');
-            if (brandEl) siteSettings.brandName = brandEl.value;
+        window.handleHomepageCMSUpdate = function(e) {
+    if (e) e.preventDefault();
+    
+    try {
+        // Safe assignment with element existence checks
+        const brandEl = document.getElementById('cms-brand-name');
+        if (brandEl) siteSettings.brandName = brandEl.value;
 
-            const logoEl = document.getElementById('cms-logo-url');
-            if (logoEl) siteSettings.logoUrl = logoEl.value;
+        const logoEl = document.getElementById('cms-logo-url');
+        if (logoEl) siteSettings.logoUrl = logoEl.value;
 
-            const heroHeadEl = document.getElementById('cms-hero-heading');
-            if (heroHeadEl) siteSettings.heroHeading = heroHeadEl.value;
+        const heroHeadEl = document.getElementById('cms-hero-heading');
+        if (heroHeadEl) siteSettings.heroHeading = heroHeadEl.value;
 
-            const heroHighEl = document.getElementById('cms-hero-highlight');
-            if (heroHighEl) siteSettings.heroHighlight = heroHighEl.value;
+        const heroHighEl = document.getElementById('cms-hero-highlight');
+        if (heroHighEl) siteSettings.heroHighlight = heroHighEl.value;
 
-            const heroDescEl = document.getElementById('cms-hero-desc');
-            if (heroDescEl) siteSettings.heroDesc = heroDescEl.value;
+        const heroDescEl = document.getElementById('cms-hero-desc');
+        if (heroDescEl) siteSettings.heroDesc = heroDescEl.value;
 
-            const heroImgEl = document.getElementById('cms-hero-image');
-            if (heroImgEl) siteSettings.heroImage = heroImgEl.value;
+        const heroImgEl = document.getElementById('cms-hero-image');
+        if (heroImgEl) siteSettings.heroImage = heroImgEl.value;
 
-            const heroBgEl = document.getElementById('cms-hero-bg-image');
-            if (heroBgEl) siteSettings.heroBgImage = heroBgEl.value;
+        const heroBgEl = document.getElementById('cms-hero-bg-image');
+        if (heroBgEl) siteSettings.heroBgImage = heroBgEl.value;
 
-            const popupEnEl = document.getElementById('cms-popup-enabled');
-            if (popupEnEl) siteSettings.popupEnabled = popupEnEl.value === 'true';
+        const popupEnEl = document.getElementById('cms-popup-enabled');
+        if (popupEnEl) siteSettings.popupEnabled = popupEnEl.value === 'true';
 
-            const scrollEnEl = document.getElementById('cms-scroll-enabled');
-            if (scrollEnEl) siteSettings.scrollEnabled = scrollEnEl.value === 'true';
+        const scrollEnEl = document.getElementById('cms-scroll-enabled');
+        if (scrollEnEl) siteSettings.scrollEnabled = scrollEnEl.value === 'true';
 
-            // Popup Customizations
-            const popupTitleEl = document.getElementById('cms-popup-title');
-            if (popupTitleEl) siteSettings.popupTitle = popupTitleEl.value;
+        // Popup Customizations
+        const popupTitleEl = document.getElementById('cms-popup-title');
+        if (popupTitleEl) siteSettings.popupTitle = popupTitleEl.value;
 
-            const popupMsgEl = document.getElementById('cms-popup-msg');
-            if (popupMsgEl) siteSettings.popupMessage = popupMsgEl.value;
+        const popupMsgEl = document.getElementById('cms-popup-msg');
+        if (popupMsgEl) siteSettings.popupMessage = popupMsgEl.value;
 
-            const popupBtnEl = document.getElementById('cms-popup-btn');
-            if (popupBtnEl) siteSettings.popupBtnText = popupBtnEl.value;
+        const popupBtnEl = document.getElementById('cms-popup-btn');
+        if (popupBtnEl) siteSettings.popupBtnText = popupBtnEl.value;
 
-            // Scrolling Text Customizations
-            const scrollMsgEl = document.getElementById('cms-scroll-msg');
-            if (scrollMsgEl) siteSettings.scrollMessage = scrollMsgEl.value;
+        // Scrolling Text Customizations
+        const scrollMsgEl = document.getElementById('cms-scroll-msg');
+        if (scrollMsgEl) siteSettings.scrollMessage = scrollMsgEl.value;
 
-            const scrollSpeedEl = document.getElementById('cms-scroll-speed');
-            if (scrollSpeedEl) siteSettings.scrollSpeed = parseInt(scrollSpeedEl.value) || 15;
+        const scrollSpeedEl = document.getElementById('cms-scroll-speed');
+        if (scrollSpeedEl) siteSettings.scrollSpeed = parseInt(scrollSpeedEl.value) || 15;
 
-            const scrollFontEl = document.getElementById('cms-scroll-fontsize');
-            if (scrollFontEl) siteSettings.scrollFontSize = scrollFontEl.value;
+        const scrollFontEl = document.getElementById('cms-scroll-fontsize');
+        if (scrollFontEl) siteSettings.scrollFontSize = scrollFontEl.value;
 
-            // Cloud Sync & Render
+        // Apply changes immediately
+        if (typeof applyDynamicSettings === 'function') {
+            applyDynamicSettings();
+        }
+
+        // Cloud Sync & Render
+        if (typeof syncChangesToCloud === 'function') {
             syncChangesToCloud();
+        }
+        
+        if (typeof router !== 'undefined' && typeof router.render === 'function') {
             router.render();
         }
+
+        console.log("Homepage CMS Saved Successfully!");
+        alert("Homepage Settings Saved Successfully! 🎉"); // Success feedback
+        
+    } catch (err) {
+        console.error("CMS Save Error:", err);
+        alert("Error saving: " + err.message);
+    }
+};
 
        function applyDynamicSettings() {
             // Update Admin Fields if inside Admin Panel
