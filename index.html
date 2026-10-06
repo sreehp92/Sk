@@ -2797,47 +2797,71 @@
 
         }
 
+        w// 👈 Bulletproof Admin Tab Switcher & Renderer
         window.setAdminTab = function(tab) {
-            currentAdminTab = tab;
+            try {
+                // 1. Data Safety: டேட்டா காலியாக இருந்தால் பேஜ் கிராஷ் ஆகாமல் தடுக்க
+                if (typeof productsData === 'undefined' || !Array.isArray(productsData)) productsData = [];
+                if (typeof categoriesList === 'undefined' || !Array.isArray(categoriesList)) categoriesList = [];
+                if (typeof faqsData === 'undefined' || !Array.isArray(faqsData)) faqsData = [];
+                if (typeof safetyPointsData === 'undefined' || !Array.isArray(safetyPointsData)) safetyPointsData = [];
+                if (typeof currentAdminCategoryTab === 'undefined') currentAdminCategoryTab = 'all';
 
-            // 1. எல்லா அட்மின் டேப்களையும் மறைப்பது (Hide all tabs)
-            const allTabs = ['dashboard', 'homepage', 'products', 'categories', 'faq', 'safety', 'bulk', 'settings'];
-            allTabs.forEach(t => {
-                const el = document.getElementById('admin-tab-' + t);
-                if (el) el.classList.add('hidden');
-            });
+                // 2. Tab Name Set
+                currentAdminTab = tab;
 
-            // 2. கிளிக் செய்த டேப்பை மட்டும் உடனே திறப்பது (Show active tab)
-            const activeEl = document.getElementById('admin-tab-' + tab);
-            if (activeEl) {
-                activeEl.classList.remove('hidden');
-            }
-
-            // 3. கிளிக் செய்த பட்டனின் நிறத்தை Amber நிறமாக மாற்றுவது
-            const buttons = document.querySelectorAll('button[onclick*="setAdminTab"]');
-            buttons.forEach(btn => {
-                const attr = btn.getAttribute('onclick') || '';
-                if (attr.includes("'" + tab + "'")) {
-                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition bg-amber-600 text-white shadow";
-                } else {
-                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300";
+                // 3. Router Re-render (ஸ்கிரீனை புதுப்பிக்கும் அசல் முறை)
+                if (typeof router !== 'undefined') {
+                    if (typeof router.render === 'function') {
+                        router.render();
+                    } else if (typeof router.navigate === 'function') {
+                        router.navigate('admin');
+                    }
                 }
-            });
+
+                // 4. Backup DOM Switch (ஒருவேளை Router ரெண்டர் செய்யாவிட்டாலும் நேரடியாக திறக்க)
+                const targetIds = [
+                    'admin-tab-' + tab,
+                    'admin-tab-' + tab.replace(/s$/, ''), // singular (product)
+                    'admin-tab-' + tab + 's',             // plural (products)
+                    'admin-tab-faq',
+                    'admin-tab-faqs',
+                    'admin-tab-settings',
+                    'admin-tab-business',
+                    'admin-tab-bulk',
+                    'admin-tab-excel'
+                ];
+
+                const allSections = document.querySelectorAll('[id^="admin-tab-"]');
+                if (allSections.length > 0) {
+                    allSections.forEach(el => el.classList.add('hidden'));
+                    for (let id of targetIds) {
+                        const target = document.getElementById(id);
+                        if (target) {
+                            target.classList.remove('hidden');
+                            break;
+                        }
+                    }
+                }
+
+            } catch (err) {
+                console.error("Tab switch error:", err);
+                alert("Tab Error: " + err.message);
+            }
         };
 
-        // குளோபல் சப்போர்ட்டுக்காக
-        function setAdminTab(tab) {
-            window.setAdminTab(tab);
-        }
+        // எல்லா பட்டன் ஈவென்ட்களுக்குமான குளோபல் சப்போர்ட்
+        window.switchAdminTab = window.setAdminTab;
+        window.setTab = window.setAdminTab;
+        function setAdminTab(t) { window.setAdminTab(t); }
 
         window.setAdminCategoryTab = function(key) {
             currentAdminCategoryTab = key;
-            router.render();
+            if (typeof router !== 'undefined' && typeof router.render === 'function') {
+                router.render();
+            }
         };
-
-        function setAdminCategoryTab(key) {
-            window.setAdminCategoryTab(key);
-        }
+        function setAdminCategoryTab(key) { window.setAdminCategoryTab(key); }
 
 
 
