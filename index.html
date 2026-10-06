@@ -3515,67 +3515,40 @@
 
 
         async function syncChangesToCloud() {
-
             showToast("Syncing changes live to Supabase...", "info");
+            
+            // 1. பிரவுசரின் லோக்கல் மெமரியில் உடனே சேவ் செய்ய
+            localStorage.setItem('siteSettings', JSON.stringify(siteSettings));
 
             try {
-
                 const payload = { 
-
                     id: 1, 
-
                     content: { siteSettings, businessInfo, categoriesList, productsData, faqsData, safetyPointsData } 
-
                 };
 
-
-
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/store_data`, {
-
                     method: "POST",
-
                     headers: {
-
                         "apikey": SUPABASE_KEY,
-
                         "Authorization": `Bearer ${SUPABASE_KEY}`,
-
                         "Content-Type": "application/json",
-
                         "Prefer": "resolution=merge-duplicates"
-
                     },
-
                     body: JSON.stringify(payload)
-
                 });
 
-
-
                 if (res.ok) {
-
                     showToast("Changes successfully saved to Supabase!");
-
                 } else {
-
                     const errText = await res.text();
-
                     console.error("Supabase sync error:", errText);
-
                     showToast("Failed to sync with cloud", "error");
-
                 }
-
             } catch (err) {
-
                 console.error("Network error during sync", err);
-
                 showToast("Network error during sync", "error");
-
             }
-
         }
-
 
 
         window.onload = async function() {
