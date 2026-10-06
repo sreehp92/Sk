@@ -2885,6 +2885,10 @@
             router.render();
         }
 
+        if (typeof applyDynamicSettings === 'function') {
+            applyDynamicSettings();
+        }
+        
         console.log("Homepage CMS Saved Successfully!");
         alert("Homepage Settings Saved Successfully! 🎉"); // Success feedback
         
