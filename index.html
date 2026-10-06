@@ -111,6 +111,22 @@
             opacity: 0; 
             transition: all 0.3s ease-in-out; 
         }
+
+        /* Marquee Ticker Scrolling Animations */
+        @keyframes marqueeScroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            will-change: transform;
+            animation: marqueeScroll var(--marquee-speed, 20s) linear infinite;
+        }
+        .marquee-container:hover .animate-marquee {
+            animation-play-state: paused;
+        }
+        
     </style>
 
 </head>
@@ -141,6 +157,15 @@
             <!-- Action Button -->
             <button id="popup-action-btn" onclick="handlePopupAction()" class="w-full bg-gradient-to-r from-amber-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-500/30 transition transform hover:-translate-y-0.5 text-xs sm:text-sm uppercase tracking-wider">
             </button>
+        </div>
+    </div>
+
+    <!-- Top Announcement Scrolling Ticker Bar -->
+    <div id="top-marquee-bar" class="w-full overflow-hidden marquee-container relative z-40 transition-all border-b border-black/10 py-1.5">
+        <div class="flex whitespace-nowrap overflow-hidden">
+            <span id="marquee-text-content" class="animate-marquee font-semibold tracking-wide">
+                <!-- Text dynamically loaded here -->
+            </span>
         </div>
     </div>
 
@@ -397,8 +422,14 @@
             popupDesc: "Welcome to SK Crackers! Get flat 30% OFF on all Family Gift Boxes. Limited time offer exclusively for you.",
             popupImage: "",
             popupBtnText: "Claim Offer Now",
-            popupAction: "catalogue"
-
+            popupAction: "catalogue",
+            // Marquee Ticker Settings
+            marqueeEnabled: true,
+            marqueeText: "✨ Special Diwali Festival Sale! Flat 30% OFF on all Family Gift Boxes | 100% Certified Safe & Green Crackers | Direct Wholesale Price | Book your order soon! ✨",
+            marqueeBgColor: "#D97706",
+            marqueeTextColor: "#ffffff",
+            marqueeFontSize: 13,
+            marqueeSpeed: 20
         };
 
         let businessInfo = {
@@ -567,6 +598,26 @@
             }
         }
 
+        // --- MARQUEE SCROLL TICKER FUNCTION ---
+        function renderMarqueeBar() {
+            const bar = document.getElementById('top-marquee-bar');
+            const textSpan = document.getElementById('marquee-text-content');
+            if (!bar || !textSpan) return;
+
+            if (!siteSettings.marqueeEnabled) {
+                bar.style.display = 'none';
+                return;
+            }
+
+            bar.style.display = 'block';
+            bar.style.backgroundColor = siteSettings.marqueeBgColor || '#D97706';
+            bar.style.setProperty('--marquee-speed', `${siteSettings.marqueeSpeed || 20}s`);
+
+            textSpan.style.color = siteSettings.marqueeTextColor || '#ffffff';
+            textSpan.style.fontSize = `${siteSettings.marqueeFontSize || 13}px`;
+            textSpan.innerText = siteSettings.marqueeText || '';
+        }
+        
         // Toast Notification System
 
         function showToast(message, type = 'success') {
@@ -2370,6 +2421,68 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Top Marquee Scrolling Bar CMS Settings -->
+                                <div class="border-t border-slate-200 dark:border-slate-800 pt-5 mt-5 space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-bold text-sm text-amber-600 flex items-center">
+                                            <i class="fa-solid fa-bullhorn mr-2"></i> Top Scrolling Announcement Bar Settings
+                                        </h4>
+                                        <button type="button" onclick="renderMarqueeBar()" class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-200">
+                                            <i class="fa-solid fa-rotate mr-1"></i> Refresh Bar
+                                        </button>
+                                    </div>
+
+                                    <!-- Enable / Disable Toggle -->
+                                    <div class="flex items-center space-x-2 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                                        <input type="checkbox" id="cms-marquee-enabled" ${siteSettings.marqueeEnabled ? 'checked' : ''} class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                                        <label for="cms-marquee-enabled" class="text-xs font-bold cursor-pointer">Show Scrolling Announcement Bar on Top</label>
+                                    </div>
+
+                                    <!-- Scroll Message Text -->
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1">Scrolling Message Text</label>
+                                        <textarea id="cms-marquee-text" rows="2" placeholder="Enter scrolling festival announcement..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">${siteSettings.marqueeText || ''}</textarea>
+                                    </div>
+
+                                    <!-- Color Palettes (Background & Text) -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                                            <label class="block text-xs font-semibold mb-1.5">Background Color</label>
+                                            <div class="flex items-center space-x-2">
+                                                <input type="color" id="cms-marquee-bg-color" value="${siteSettings.marqueeBgColor || '#D97706'}" class="w-9 h-9 rounded-lg border-0 cursor-pointer p-0.5 bg-transparent">
+                                                <input type="text" id="cms-marquee-bg-color-text" value="${siteSettings.marqueeBgColor || '#D97706'}" oninput="document.getElementById('cms-marquee-bg-color').value = this.value" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-mono uppercase">
+                                            </div>
+                                        </div>
+                                        <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                                            <label class="block text-xs font-semibold mb-1.5">Text Font Color</label>
+                                            <div class="flex items-center space-x-2">
+                                                <input type="color" id="cms-marquee-text-color" value="${siteSettings.marqueeTextColor || '#ffffff'}" class="w-9 h-9 rounded-lg border-0 cursor-pointer p-0.5 bg-transparent">
+                                                <input type="text" id="cms-marquee-text-color-text" value="${siteSettings.marqueeTextColor || '#ffffff'}" oninput="document.getElementById('cms-marquee-text-color').value = this.value" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-mono uppercase">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Font Size & Scroll Speed -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-semibold mb-1">Font Size (Pixels)</label>
+                                            <input type="number" id="cms-marquee-font-size" value="${siteSettings.marqueeFontSize || 13}" min="10" max="24" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                                            <span class="text-[10px] text-slate-400">Standard range: 12px to 16px</span>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold mb-1">Scroll Speed</label>
+                                            <select id="cms-marquee-speed" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                                                <option value="12" ${siteSettings.marqueeSpeed == 12 ? 'selected' : ''}>Fast (12s)</option>
+                                                <option value="20" ${siteSettings.marqueeSpeed == 20 ? 'selected' : ''}>Normal / Medium (20s)</option>
+                                                <option value="30" ${siteSettings.marqueeSpeed == 30 ? 'selected' : ''}>Slow & Readable (30s)</option>
+                                                <option value="40" ${siteSettings.marqueeSpeed == 40 ? 'selected' : ''}>Very Slow (40s)</option>
+                                            </select>
+                                            <span class="text-[10px] text-slate-400">Controls how fast text moves</span>
+                                        </div>
+                                    </div>
+                                </div>
+                
                                 
                                 <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition">Save Homepage & Background</button>
 
@@ -2856,6 +2969,16 @@
             siteSettings.popupImage = document.getElementById('cms-popup-image').value;
             siteSettings.popupBtnText = document.getElementById('cms-popup-btn').value;
             siteSettings.popupAction = document.getElementById('cms-popup-action').value;
+
+            // Marquee Ticker Settings Update
+            siteSettings.marqueeEnabled = document.getElementById('cms-marquee-enabled').checked;
+            siteSettings.marqueeText = document.getElementById('cms-marquee-text').value;
+            siteSettings.marqueeBgColor = document.getElementById('cms-marquee-bg-color').value;
+            siteSettings.marqueeTextColor = document.getElementById('cms-marquee-text-color').value;
+            siteSettings.marqueeFontSize = parseInt(document.getElementById('cms-marquee-font-size').value, 10) || 13;
+            siteSettings.marqueeSpeed = parseInt(document.getElementById('cms-marquee-speed').value, 10) || 20;
+
+            renderMarqueeBar();
 
             const headerBrand = document.getElementById('brand-title-header');
 
@@ -3527,6 +3650,7 @@
 
         window.onload = async function() {
             await loadDataFromSupabase();
+            renderMarqueeBar();
             if (window.location.hash === '#admin') {
                 router.navigate('admin');
             } else {
