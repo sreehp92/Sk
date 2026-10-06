@@ -2797,14 +2797,46 @@
 
         }
 
-        function setAdminTab(tab) {
+        window.setAdminTab = function(tab) {
             currentAdminTab = tab;
-            router.render();
+
+            // 1. எல்லா அட்மின் டேப்களையும் மறைப்பது (Hide all tabs)
+            const allTabs = ['dashboard', 'homepage', 'products', 'categories', 'faq', 'safety', 'bulk', 'settings'];
+            allTabs.forEach(t => {
+                const el = document.getElementById('admin-tab-' + t);
+                if (el) el.classList.add('hidden');
+            });
+
+            // 2. கிளிக் செய்த டேப்பை மட்டும் உடனே திறப்பது (Show active tab)
+            const activeEl = document.getElementById('admin-tab-' + tab);
+            if (activeEl) {
+                activeEl.classList.remove('hidden');
+            }
+
+            // 3. கிளிக் செய்த பட்டனின் நிறத்தை Amber நிறமாக மாற்றுவது
+            const buttons = document.querySelectorAll('button[onclick*="setAdminTab"]');
+            buttons.forEach(btn => {
+                const attr = btn.getAttribute('onclick') || '';
+                if (attr.includes("'" + tab + "'")) {
+                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition bg-amber-600 text-white shadow";
+                } else {
+                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300";
+                }
+            });
+        };
+
+        // குளோபல் சப்போர்ட்டுக்காக
+        function setAdminTab(tab) {
+            window.setAdminTab(tab);
         }
 
-        function setAdminCategoryTab(key) {
+        window.setAdminCategoryTab = function(key) {
             currentAdminCategoryTab = key;
             router.render();
+        };
+
+        function setAdminCategoryTab(key) {
+            window.setAdminCategoryTab(key);
         }
 
 
