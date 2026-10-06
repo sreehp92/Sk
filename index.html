@@ -98,28 +98,6 @@
 
         }
 
-        /* Scrolling Text Animation */
-        .marquee-container { overflow: hidden; white-space: nowrap; width: 100%; }
-        .marquee-content { display: inline-block; padding-left: 100%; animation: marquee linear infinite; }
-        @keyframes marquee {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); }
-        }
-        /* Popup Custom Smooth Animations */
-        .popup-overlay-active { opacity: 1; visibility: visible; }
-        .popup-overlay-hidden { opacity: 0; visibility: hidden; transition: all 0.3s ease-in-out; }
-        
-        .popup-box-active { 
-            transform: scale(1) translateY(0); 
-            opacity: 1; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-        .popup-box-hidden { 
-            transform: scale(0.9) translateY(20px); 
-            opacity: 0; 
-            transition: all 0.3s ease-in-out; 
-        }
-
     </style>
 
 </head>
@@ -130,39 +108,6 @@
 
     <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
-    <!-- Promo Popup Modal -->
-    <div id="promo-popup" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center popup-overlay-hidden p-4">
-        <div id="promo-popup-box" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl w-full max-w-md p-8 text-center relative border-t-4 border-amber-500 popup-box-hidden">
-            
-            <button onclick="closePromoPopup()" class="absolute top-4 right-5 text-slate-400 hover:text-red-500 transition text-2xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <div class="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-inner">
-                <i class="fa-solid fa-gift text-4xl"></i>
-            </div>
-
-            <!-- Popup Title -->
-            <h3 id="promo-popup-title" class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3">
-                Special Diwali Offer!
-            </h3>
-            
-            <!-- Popup Message -->
-            <p id="promo-popup-text" class="text-slate-600 dark:text-slate-400 text-sm mb-8 leading-relaxed">
-                Welcome to SK Crackers!
-            </p>
-
-            <!-- Popup Button Text -->
-            <button onclick="closePromoPopup()" id="promo-popup-btn-text" class="w-full bg-gradient-to-r from-amber-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-500/30 transition transform hover:-translate-y-0.5">
-                Claim Offer Now
-            </button>
-        </div>
-    </div>
-    
-    <!-- Dynamic Scrolling Bar -->
-    <div id="dynamic-scroll-bar" class="hidden bg-gradient-to-r from-amber-600 to-red-600 text-white text-[11px] sm:text-xs font-bold py-1.5 marquee-container z-50 relative">
-        <div id="dynamic-scroll-text" class="marquee-content"></div>
-    </div>
 
 
     <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
@@ -411,16 +356,7 @@
 
             heroBgImage: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600",
 
-            whatsappNumber: "9658399991",
-
-            popupEnabled: true,
-            popupMessage: "Welcome to SK Crackers! Get flat 30% OFF on all Family Gift Boxes.",
-            scrollEnabled: true,
-            scrollMessage: "🎉 Mega Diwali Sale! Up to 30% OFF on all Family Packs. Order Now! 🎉",
-            scrollSpeed: 15,
-            scrollFontSize: "text-xs",
-            popupTitle: "Special Diwali Offer!",
-            popupBtnText: "Claim Offer Now"
+            whatsappNumber: "9658399991"
 
         };
 
@@ -532,28 +468,7 @@
 
         let currentAdminCategoryTab = 'all';
 
-// Popup Animation Functions
-        function openPromoPopup() {
-            const overlay = document.getElementById('promo-popup');
-            const box = document.getElementById('promo-popup-box');
-            overlay.classList.remove('popup-overlay-hidden');
-            overlay.classList.add('popup-overlay-active');
-            setTimeout(() => {
-                box.classList.remove('popup-box-hidden');
-                box.classList.add('popup-box-active');
-            }, 10);
-        }
 
-        function closePromoPopup() {
-            const overlay = document.getElementById('promo-popup');
-            const box = document.getElementById('promo-popup-box');
-            box.classList.remove('popup-box-active');
-            box.classList.add('popup-box-hidden');
-            setTimeout(() => {
-                overlay.classList.remove('popup-overlay-active');
-                overlay.classList.add('popup-overlay-hidden');
-            }, 300); 
-        }
 
         // Toast Notification System
 
@@ -2255,7 +2170,7 @@
 
                             <h3 class="font-bold text-lg flex items-center"><i class="fa-solid fa-house-laptop text-amber-600 mr-2"></i> Edit Public Homepage Content, Logo & Background</h3>
 
-                            <form onsubmit="window.handleHomepageCMSUpdate(event); return false;" class="space-y-4">
+                            <form onsubmit="handleHomepageCMSUpdate(event)" class="space-y-4">
 
                                 <div>
 
@@ -2313,61 +2228,15 @@
 
                                 </div>
 
-                              <!-- Popup & Scroll Settings -->
-                                <div class="col-span-full border-t border-slate-200 dark:border-slate-700 pt-4 mt-2">
-                                    <h4 class="font-bold text-sm text-amber-600 mb-3">Popup & Scrolling Announcements</h4>
-                                </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold mb-1">Enable Popup?</label>
-                                        <select id="cms-popup-enabled" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">
-                                            <option value="true" ${siteSettings.popupEnabled ? 'selected' : ''}>Yes, Show Popup</option>
-                                            <option value="false" ${!siteSettings.popupEnabled ? 'selected' : ''}>No, Hide Popup</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold mb-1">Enable Scrolling Text?</label>
-                                        <select id="cms-scroll-enabled" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">
-                                            <option value="true" ${siteSettings.scrollEnabled ? 'selected' : ''}>Yes, Show Scroll</option>
-                                            <option value="false" ${!siteSettings.scrollEnabled ? 'selected' : ''}>No, Hide Scroll</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold mb-1">Popup Title</label>
-                                    <input type="text" id="cms-popup-title" value="${siteSettings.popupTitle || ''}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold mb-1">Popup Message</label>
-                                    <textarea id="cms-popup-msg" rows="2" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">${siteSettings.popupMessage || ''}</textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold mb-1">Popup Button Text</label>
-                                    <input type="text" id="cms-popup-btn" value="${siteSettings.popupBtnText || ''}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
-                                </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold mb-1">Scroll Speed (Sec)</label>
-                                        <input type="number" id="cms-scroll-speed" value="${siteSettings.scrollSpeed || 15}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs" title="Lower = Faster">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold mb-1">Scroll Text Font Size</label>
-                                        <select id="cms-scroll-fontsize" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">
-                                            <option value="text-[10px]" ${siteSettings.scrollFontSize === 'text-[10px]' ? 'selected' : ''}>Small (10px)</option>
-                                            <option value="text-xs" ${siteSettings.scrollFontSize === 'text-xs' ? 'selected' : ''}>Normal (XS)</option>
-                                            <option value="text-sm" ${siteSettings.scrollFontSize === 'text-sm' ? 'selected' : ''}>Medium (SM)</option>
-                                            <option value="text-base" ${siteSettings.scrollFontSize === 'text-base' ? 'selected' : ''}>Large (Base)</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            
-                    <div class="pt-2">
-                        <button type="button" onclick="window.handleHomepageCMSUpdate()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-md">
-                            Save Homepage & Background
-                        </button>
+                                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition">Save Homepage & Background</button>
+
+                            </form>
+
+                        </div>
+
                     </div>
-                </form>
+
+
 
                     <!-- TAB 3: PRODUCT MANAGER -->
 
@@ -2792,192 +2661,99 @@
                     </div>
 
                 </div>
+
             `;
+
         }
-    
-       window.setAdminTab = function(tab) {
-            try {
-                // 1. Data Safety: டேட்டா காலியாக இருந்தால் பேஜ் கிராஷ் ஆகாமல் தடுக்க
-                if (typeof productsData === 'undefined' || !Array.isArray(productsData)) productsData = [];
-                if (typeof categoriesList === 'undefined' || !Array.isArray(categoriesList)) categoriesList = [];
-                if (typeof faqsData === 'undefined' || !Array.isArray(faqsData)) faqsData = [];
-                if (typeof safetyPointsData === 'undefined' || !Array.isArray(safetyPointsData)) safetyPointsData = [];
-                if (typeof currentAdminCategoryTab === 'undefined') currentAdminCategoryTab = 'all';
 
-                // 2. Tab Name Set
-                currentAdminTab = tab;
 
-                // 3. Router Re-render
-                if (typeof router !== 'undefined') {
-                    if (typeof router.render === 'function') {
-                        router.render();
-                    } else if (typeof router.navigate === 'function') {
-                        router.navigate('admin');
-                    }
-                }
 
-                // 4. Backup DOM Switch
-                const targetIds = [
-                    'admin-tab-' + tab,
-                    'admin-tab-' + tab.replace(/s$/, ''),
-                    'admin-tab-' + tab + 's',
-                    'admin-tab-faq',
-                    'admin-tab-faqs',
-                    'admin-tab-settings',
-                    'admin-tab-business',
-                    'admin-tab-bulk',
-                    'admin-tab-excel'
-                ];
+        function setAdminTab(tab) {
 
-                const allSections = document.querySelectorAll('[id^="admin-tab-"]');
-                if (allSections.length > 0) {
-                    allSections.forEach(el => el.classList.add('hidden'));
-                    for (let id of targetIds) {
-                        const target = document.getElementById(id);
-                        if (target) {
-                            target.classList.remove('hidden');
-                            break;
-                        }
-                    }
-                }
+            currentAdminTab = tab;
 
-                
+            router.render();
 
-        window.handleHomepageCMSUpdate = async function(e) {
-            if (e) e.preventDefault();
-            
-            try {
-                // 1. Brand & Hero Fields
-                const brandEl = document.getElementById('cms-brand-name');
-                if (brandEl) siteSettings.brandName = brandEl.value;
+        }
 
-                const logoEl = document.getElementById('cms-logo-url');
-                if (logoEl) siteSettings.logoUrl = logoEl.value;
 
-                const heroHeadEl = document.getElementById('cms-hero-heading');
-                if (heroHeadEl) siteSettings.heroHeading = heroHeadEl.value;
 
-                const heroHighEl = document.getElementById('cms-hero-highlight');
-                if (heroHighEl) siteSettings.heroHighlight = heroHighEl.value;
+        function setAdminCategoryTab(key) {
 
-                const heroDescEl = document.getElementById('cms-hero-desc');
-                if (heroDescEl) siteSettings.heroDesc = heroDescEl.value;
+            currentAdminCategoryTab = key;
 
-                const heroImgEl = document.getElementById('cms-hero-image');
-                if (heroImgEl) siteSettings.heroImage = heroImgEl.value;
+            router.render();
 
-                const heroBgEl = document.getElementById('cms-hero-bg-image');
-                if (heroBgEl) siteSettings.heroBgImage = heroBgEl.value;
+        }
 
-                // 2. Popup Settings
-                const popupEnEl = document.getElementById('cms-popup-enabled');
-                if (popupEnEl) siteSettings.popupEnabled = popupEnEl.value === 'true';
 
-                const popupTitleEl = document.getElementById('cms-popup-title');
-                if (popupTitleEl) siteSettings.popupTitle = popupTitleEl.value;
 
-                const popupMsgEl = document.getElementById('cms-popup-msg');
-                if (popupMsgEl) siteSettings.popupMessage = popupMsgEl.value;
+        function handleHomepageCMSUpdate(e) {
 
-                const popupBtnEl = document.getElementById('cms-popup-btn');
-                if (popupBtnEl) siteSettings.popupBtnText = popupBtnEl.value;
+            e.preventDefault();
 
-                // 3. Scrolling Text Settings
-                const scrollEnEl = document.getElementById('cms-scroll-enabled');
-                if (scrollEnEl) siteSettings.scrollEnabled = scrollEnEl.value === 'true';
+            siteSettings.brandName = document.getElementById('cms-brand-name').value;
 
-                const scrollMsgEl = document.getElementById('cms-scroll-msg');
-                if (scrollMsgEl) siteSettings.scrollMessage = scrollMsgEl.value;
+            siteSettings.logoUrl = document.getElementById('cms-logo-url').value;
 
-                const scrollSpeedEl = document.getElementById('cms-scroll-speed');
-                if (scrollSpeedEl) siteSettings.scrollSpeed = parseInt(scrollSpeedEl.value) || 15;
+            siteSettings.heroHeading = document.getElementById('cms-hero-heading').value;
 
-                const scrollFontEl = document.getElementById('cms-scroll-fontsize');
-                if (scrollFontEl) siteSettings.scrollFontSize = scrollFontEl.value;
+            siteSettings.heroHighlight = document.getElementById('cms-hero-highlight').value;
 
-               
-                await syncChangesToCloud();
+            siteSettings.heroDesc = document.getElementById('cms-hero-desc').value;
 
-            
-                const headerBrand = document.getElementById('brand-title-header');
-                if(headerBrand && siteSettings.brandName) headerBrand.innerText = siteSettings.brandName;
+            siteSettings.heroImage = document.getElementById('cms-hero-image').value;
 
-                const logoContainer = document.getElementById('brand-logo-container');
-                if(logoContainer) {
-                    if(siteSettings.logoUrl) {
-                        logoContainer.innerHTML = `<img src="${siteSettings.logoUrl}" class="w-full h-full object-cover">`;
-                    } else {
-                        logoContainer.innerHTML = `<i id="brand-logo-icon" class="fa-solid fa-wand-magic-sparkles text-lg"></i>`;
-                    }
-                }
+            siteSettings.heroBgImage = document.getElementById('cms-hero-bg-image').value;
 
-                router.render();
-                alert("Homepage Settings Saved to Supabase Successfully! 🎉");
 
-            } catch (err) {
-                console.error("CMS Save Error:", err);
-                alert("Save Error: " + err.message);
-            }
-        };
 
-       function applyDynamicSettings() {
-            // Update Admin Fields if inside Admin Panel
-            const pEn = document.getElementById('cms-popup-enabled');
-            if (pEn) {
-                pEn.value = siteSettings.popupEnabled ? 'true' : 'false';
-                document.getElementById('cms-scroll-enabled').value = siteSettings.scrollEnabled ? 'true' : 'false';
-                
-                // Admin Panel Title மற்றும் Button இன்புட்ஸை இங்கே அப்டேட் செய்ய வேண்டும்
-                const pTitleInput = document.getElementById('cms-popup-title');
-                if(pTitleInput) pTitleInput.value = siteSettings.popupTitle || '';
-                
-                document.getElementById('cms-popup-msg').value = siteSettings.popupMessage || '';
-                
-                const pBtnInput = document.getElementById('cms-popup-btn');
-                if(pBtnInput) pBtnInput.value = siteSettings.popupBtnText || '';
+            const headerBrand = document.getElementById('brand-title-header');
 
-                document.getElementById('cms-scroll-msg').value = siteSettings.scrollMessage || '';
-                document.getElementById('cms-scroll-speed').value = siteSettings.scrollSpeed || 15;
-                const fsSelect = document.getElementById('cms-scroll-fontsize');
-                if(fsSelect) fsSelect.value = siteSettings.scrollFontSize || 'text-xs';
-            }
+            if(headerBrand && siteSettings.brandName) headerBrand.innerText = siteSettings.brandName;
 
-            // Scroll Bar Logic for Frontend & Mobile View
-            const scrollBar = document.getElementById('dynamic-scroll-bar');
-            const scrollText = document.getElementById('dynamic-scroll-text');
-            if(scrollBar && scrollText) {
-                if(siteSettings.scrollEnabled) {
-                    scrollBar.classList.remove('hidden');
-                    scrollText.innerText = siteSettings.scrollMessage;
-                    scrollText.style.animationDuration = (siteSettings.scrollSpeed || 15) + 's';
-                    
-                    // Apply dynamic font size & mobile friendly classes
-                    scrollBar.className = `bg-gradient-to-r from-amber-600 to-red-600 text-white font-bold py-1.5 marquee-container z-50 relative ${siteSettings.scrollFontSize || 'text-xs'}`;
+
+
+            const logoContainer = document.getElementById('brand-logo-container');
+
+            if(logoContainer) {
+
+                if(siteSettings.logoUrl) {
+
+                    logoContainer.innerHTML = `<img src="${siteSettings.logoUrl}" class="w-full h-full object-cover">`;
+
                 } else {
-                    scrollBar.classList.add('hidden');
+
+                    logoContainer.innerHTML = `<i id="brand-logo-icon" class="fa-solid fa-wand-magic-sparkles text-lg"></i>`;
+
                 }
+
             }
 
-            // Frontend Popup Elements Update
-            const popupTitleEl = document.getElementById('promo-popup-title');
-            if (popupTitleEl) popupTitleEl.innerText = siteSettings.popupTitle || 'Special Offer!';
 
-            const popupTextEl = document.getElementById('promo-popup-text');
-            if (popupTextEl) popupTextEl.innerText = siteSettings.popupMessage || '';
 
-            const popupBtnEl = document.getElementById('promo-popup-btn-text');
-            if (popupBtnEl) {
-                popupBtnEl.innerText = siteSettings.popupBtnText || 'Claim Offer Now';
-            }
+            syncChangesToCloud();
+
+            router.render();
+
         }
+
+
 
         function handleSafetyCMSUpdate(e) {
+
             e.preventDefault();
+
             const t = document.getElementById('safety-cms-title').value;
+
             const txt = document.getElementById('safety-cms-text').value;
+
             safetyPointsData[0] = { title: t, text: txt };
+
             syncChangesToCloud();
+
             router.render();
+
         }
 
 
@@ -3465,117 +3241,159 @@
         // Supabase Database Sync Functions
 
         async function loadDataFromSupabase() {
+
             try {
-                // 👈 லோக்கல் கேச் ஏற்கனவே இருந்தால், கிளவுட் லோடைத் தவிர்க்கலாம் அல்லது லோக்கல் டேட்டாவிற்கே முன்னுரிமை தரலாம்
-                const localCache = localStorage.getItem('sk_store_cache');
-                if (localCache) {
-                    return; // லோக்கல் டேட்டா இருந்தால் கிளவுட் ஓவர்ரைட் செய்யாது!
-                }
 
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/store_data?id=eq.1`, {
+
                     method: "GET",
+
                     headers: {
+
                         "apikey": SUPABASE_KEY,
+
                         "Authorization": `Bearer ${SUPABASE_KEY}`,
+
                         "Content-Type": "application/json"
+
                     }
+
                 });
+
                 const rows = await res.json();
+
                 if (rows && rows.length > 0 && rows[0].content) {
+
                     const data = rows[0].content;
-                    if(data.siteSettings) siteSettings = data.siteSettings;
+
+                    if(data.siteSettings) {
+
+                        siteSettings = data.siteSettings;
+
+                        const logoContainer = document.getElementById('brand-logo-container');
+
+                        if(logoContainer && siteSettings.logoUrl) {
+
+                            logoContainer.innerHTML = `<img src="${siteSettings.logoUrl}" class="w-full h-full object-cover">`;
+
+                        }
+
+                    }
+
                     if(data.businessInfo) businessInfo = data.businessInfo;
+
                     if(data.categoriesList) categoriesList = data.categoriesList;
+
                     if(data.productsData) productsData = data.productsData;
+
                     if(data.faqsData) faqsData = data.faqsData;
+
                     if(data.safetyPointsData) safetyPointsData = data.safetyPointsData;
 
+
+
                     const headerBrand = document.getElementById('brand-title-header');
+
                     if(headerBrand && siteSettings.brandName) headerBrand.innerText = siteSettings.brandName;
 
+
+
                     router.render();
+
                 }
+
             } catch (err) {
+
                 console.log("Error loading from Supabase", err);
+
             }
+
         }
 
 
 
         async function syncChangesToCloud() {
-            showToast("Saving changes...", "info");
-            
-            localStorage.setItem('sk_store_cache', JSON.stringify({
-                siteSettings, businessInfo, categoriesList, productsData, faqsData, safetyPointsData
-            }));
+
+            showToast("Syncing changes live to Supabase...", "info");
 
             try {
+
                 const payload = { 
+
                     id: 1, 
+
                     content: { siteSettings, businessInfo, categoriesList, productsData, faqsData, safetyPointsData } 
+
                 };
 
+
+
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/store_data`, {
+
                     method: "POST",
+
                     headers: {
+
                         "apikey": SUPABASE_KEY,
+
                         "Authorization": `Bearer ${SUPABASE_KEY}`,
+
                         "Content-Type": "application/json",
+
                         "Prefer": "resolution=merge-duplicates"
+
                     },
+
                     body: JSON.stringify(payload)
+
                 });
 
+
+
                 if (res.ok) {
-                    showToast("Changes successfully saved!");
+
+                    showToast("Changes successfully saved to Supabase!");
+
                 } else {
-                    console.warn("Cloud sync skipped, using local data.");
+
+                    const errText = await res.text();
+
+                    console.error("Supabase sync error:", errText);
+
+                    showToast("Failed to sync with cloud", "error");
+
                 }
+
             } catch (err) {
+
                 console.error("Network error during sync", err);
+
+                showToast("Network error during sync", "error");
+
             }
+
         }
 
 
+
         window.onload = async function() {
-            // 👈 1. லோக்கல் மெமரியில் இருந்து முந்தைய டேட்டாவை உடனே எடுப்பது
-            const localCache = localStorage.getItem('sk_store_cache');
-            if (localCache) {
-                try {
-                    const parsed = JSON.parse(localCache);
-                    if(parsed.siteSettings) siteSettings = parsed.siteSettings;
-                    if(parsed.businessInfo) businessInfo = parsed.businessInfo;
-                    if(parsed.categoriesList) categoriesList = parsed.categoriesList;
-                    if(parsed.productsData) productsData = parsed.productsData;
-                    if(parsed.faqsData) faqsData = parsed.faqsData;
-                    if(parsed.safetyPointsData) safetyPointsData = parsed.safetyPointsData;
-                } catch(e) {}
-            }
 
             await loadDataFromSupabase();
-            
-            if (window.location.hash === '#admin') {
-                router.navigate('admin');
-            } else {
-                router.navigate('home');
-            }
-            
-            applyDynamicSettings();
 
-            if (siteSettings && siteSettings.popupEnabled !== false) {
-                if (siteSettings.popupMessage) {
-                    const popupText = document.getElementById('promo-popup-text');
-                    if (popupText) popupText.innerText = siteSettings.popupMessage;
-                }
-                
-                // டெஸ்ட் செய்ய පහல இருக்குற sessionStorage-க்கு பதிலா இதை பயன்படுத்தலாம்
-                setTimeout(() => {
-                    if (typeof openPromoPopup === 'function') {
-                        openPromoPopup();
-                    }
-                }, 1000);
+            if (window.location.hash === '#admin') {
+
+                router.navigate('admin');
+
+            } else {
+
+                router.navigate('home');
+
             }
+
         };
+
     </script>
+
 </body>
+
 </html>
