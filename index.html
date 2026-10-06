@@ -142,14 +142,19 @@
                 <i class="fa-solid fa-gift text-4xl"></i>
             </div>
 
-            <h3 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3">Special Diwali Offer!</h3>
+            <!-- Popup Title (Dynamic from Admin) -->
+            <h3 id="promo-popup-title" class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3">
+                ${siteSettings.popupTitle || 'Special Offer!'}
+            </h3>
             
+            <!-- Popup Message (Dynamic from Admin) -->
             <p id="promo-popup-text" class="text-slate-600 dark:text-slate-400 text-sm mb-8 leading-relaxed">
-                Welcome to SK Crackers! Get flat 30% OFF on all Family Gift Boxes.
+                ${siteSettings.popupMessage || ''}
             </p>
 
-            <button onclick="closePromoPopup()" class="w-full bg-gradient-to-r from-amber-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-500/30 transition transform hover:-translate-y-0.5">
-                Claim Offer Now
+            <!-- Popup Button Text (Dynamic from Admin) -->
+            <button onclick="closePromoPopup()" class="w-full bg-gradient-to-r from-amber-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-500/30 transition transform hover:-translate-y-0.5" id="promo-popup-btn-text">
+                ${siteSettings.popupBtnText || 'Claim Offer Now'}
             </button>
         </div>
     </div>
@@ -413,7 +418,9 @@
             scrollEnabled: true,
             scrollMessage: "🎉 Mega Diwali Sale! Up to 30% OFF on all Family Packs. Order Now! 🎉",
             scrollSpeed: 15,
-            scrollFontSize: "text-xs"
+            scrollFontSize: "text-xs",
+            popupTitle: "Special Diwali Offer!",
+            popupBtnText: "Claim Offer Now"
 
         };
 
@@ -2327,14 +2334,17 @@
                                     </div>
                                 </div>
                                 <div>
+                                    <label class="block text-xs font-semibold mb-1">Popup Title</label>
+                                    <input type="text" id="cms-popup-title" value="${siteSettings.popupTitle || ''}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                                </div>
+                                <div>
                                     <label class="block text-xs font-semibold mb-1">Popup Message</label>
                                     <textarea id="cms-popup-msg" rows="2" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">${siteSettings.popupMessage || ''}</textarea>
                                 </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                    <div class="sm:col-span-2">
-                                        <label class="block text-xs font-semibold mb-1">Scrolling Text Message</label>
-                                        <input type="text" id="cms-scroll-msg" value="${siteSettings.scrollMessage || ''}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
-                                    </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-1">Popup Button Text</label>
+                                    <input type="text" id="cms-popup-btn" value="${siteSettings.popupBtnText || ''}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                                </div>
                                     <div>
                                         <label class="block text-xs font-semibold mb-1">Scroll Speed (Sec)</label>
                                         <input type="number" id="cms-scroll-speed" value="${siteSettings.scrollSpeed || 15}" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs" title="Lower = Faster">
@@ -2826,6 +2836,8 @@
             siteSettings.scrollEnabled = document.getElementById('cms-scroll-enabled').value === 'true';
             siteSettings.popupMessage = document.getElementById('cms-popup-msg').value;
             siteSettings.scrollMessage = document.getElementById('cms-scroll-msg').value;
+            siteSettings.popupTitle = document.getElementById('cms-popup-title').value;
+            siteSettings.popupBtnText = document.getElementById('cms-popup-btn').value;
             siteSettings.scrollSpeed = parseInt(document.getElementById('cms-scroll-speed').value) || 15;
             siteSettings.scrollFontSize = document.getElementById('cms-scroll-fontsize').value;
 
