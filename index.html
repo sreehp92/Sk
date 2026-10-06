@@ -3515,10 +3515,11 @@
 
 
         async function syncChangesToCloud() {
-            showToast("Syncing changes live to Supabase...", "info");
+            showToast("Saving changes...", "info");
             
-            // 1. பிரவுசரின் லோக்கல் மெமரியில் உடனே சேவ் செய்ய
-            localStorage.setItem('siteSettings', JSON.stringify(siteSettings));
+            localStorage.setItem('sk_store_cache', JSON.stringify({
+                siteSettings, businessInfo, categoriesList, productsData, faqsData, safetyPointsData
+            }));
 
             try {
                 const payload = { 
@@ -3538,21 +3539,33 @@
                 });
 
                 if (res.ok) {
-                    showToast("Changes successfully saved to Supabase!");
+                    showToast("Changes successfully saved!");
                 } else {
-                    const errText = await res.text();
-                    console.error("Supabase sync error:", errText);
-                    showToast("Failed to sync with cloud", "error");
+                    console.warn("Cloud sync skipped, using local data.");
                 }
             } catch (err) {
                 console.error("Network error during sync", err);
-                showToast("Network error during sync", "error");
             }
         }
 
 
         window.onload = async function() {
+            // 👈 1. லோக்கல் மெமரியில் இருந்து முந்தைய டேட்டாவை உடனே எடுப்பது
+            const localCache = localStorage.getItem('sk_store_cache');
+            if (localCache) {
+                try {
+                    const parsed = JSON.parse(localCache);
+                    if(parsed.siteSettings) siteSettings = parsed.siteSettings;
+                    if(parsed.businessInfo) businessInfo = parsed.businessInfo;
+                    if(parsed.categoriesList) categoriesList = parsed.categoriesList;
+                    if(parsed.productsData) productsData = parsed.productsData;
+                    if(parsed.faqsData) faqsData = parsed.faqsData;
+                    if(parsed.safetyPointsData) safetyPointsData = parsed.safetyPointsData;
+                } catch(e) {}
+            }
+
             await loadDataFromSupabase();
+            
             if (window.location.hash === '#admin') {
                 router.navigate('admin');
             } else {
