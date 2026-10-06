@@ -97,6 +97,20 @@
             background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.90)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600') center/cover no-repeat;
 
         }
+        /* Popup Custom Smooth Animations */
+        .popup-overlay-active { opacity: 1; visibility: visible; }
+        .popup-overlay-hidden { opacity: 0; visibility: hidden; transition: all 0.3s ease-in-out; }
+        
+        .popup-box-active { 
+            transform: scale(1) translateY(0); 
+            opacity: 1; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .popup-box-hidden { 
+            transform: scale(0.9) translateY(20px); 
+            opacity: 0; 
+            transition: all 0.3s ease-in-out; 
+        }
 
     </style>
 
@@ -107,6 +121,30 @@
 
 
     <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- Promo Popup Modal -->
+    <div id="promo-popup" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center popup-overlay-hidden p-4">
+        <div id="promo-popup-box" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl w-full max-w-md p-8 text-center relative border-t-4 border-amber-500 popup-box-hidden">
+            
+            <button onclick="closePromoPopup()" class="absolute top-4 right-5 text-slate-400 hover:text-red-500 transition text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-inner">
+                <i class="fa-solid fa-gift text-4xl"></i>
+            </div>
+
+            <h3 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3">Special Diwali Offer!</h3>
+            
+            <p id="promo-popup-text" class="text-slate-600 dark:text-slate-400 text-sm mb-8 leading-relaxed">
+                Welcome to SK Crackers! Get flat 30% OFF on all Family Gift Boxes.
+            </p>
+
+            <button onclick="closePromoPopup()" class="w-full bg-gradient-to-r from-amber-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-500/30 transition transform hover:-translate-y-0.5">
+                Claim Offer Now
+            </button>
+        </div>
+    </div>
 
 
 
@@ -468,7 +506,28 @@
 
         let currentAdminCategoryTab = 'all';
 
+// Popup Animation Functions
+        function openPromoPopup() {
+            const overlay = document.getElementById('promo-popup');
+            const box = document.getElementById('promo-popup-box');
+            overlay.classList.remove('popup-overlay-hidden');
+            overlay.classList.add('popup-overlay-active');
+            setTimeout(() => {
+                box.classList.remove('popup-box-hidden');
+                box.classList.add('popup-box-active');
+            }, 10);
+        }
 
+        function closePromoPopup() {
+            const overlay = document.getElementById('promo-popup');
+            const box = document.getElementById('promo-popup-box');
+            box.classList.remove('popup-box-active');
+            box.classList.add('popup-box-hidden');
+            setTimeout(() => {
+                overlay.classList.remove('popup-overlay-active');
+                overlay.classList.add('popup-overlay-hidden');
+            }, 300); 
+        }
 
         // Toast Notification System
 
@@ -3377,23 +3436,25 @@
 
 
         window.onload = async function() {
-
             await loadDataFromSupabase();
-
             if (window.location.hash === '#admin') {
-
                 router.navigate('admin');
-
             } else {
-
                 router.navigate('home');
-
             }
-
+            
+            // Show Popup on first visit
+            if (!sessionStorage.getItem('popupShown')) {
+                if (siteSettings && siteSettings.popupMessage) {
+                    document.getElementById('promo-popup-text').innerText = siteSettings.popupMessage;
+                }
+                
+                setTimeout(() => {
+                    openPromoPopup();
+                    sessionStorage.setItem('popupShown', 'true');
+                }, 1000);
+            }
         };
-
     </script>
-
 </body>
-
 </html>
