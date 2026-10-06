@@ -2820,62 +2820,59 @@
 
 
         function handleHomepageCMSUpdate(e) {
-
             e.preventDefault();
+            
+            // Safe assignment (ஒவ்வொரு இன்புட்டும் இருக்கிறதா என்று செக் செய்து சேவ் செய்யும்)
+            const brandEl = document.getElementById('cms-brand-name');
+            if (brandEl) siteSettings.brandName = brandEl.value;
 
-            siteSettings.brandName = document.getElementById('cms-brand-name').value;
+            const logoEl = document.getElementById('cms-logo-url');
+            if (logoEl) siteSettings.logoUrl = logoEl.value;
 
-            siteSettings.logoUrl = document.getElementById('cms-logo-url').value;
+            const heroHeadEl = document.getElementById('cms-hero-heading');
+            if (heroHeadEl) siteSettings.heroHeading = heroHeadEl.value;
 
-            siteSettings.heroHeading = document.getElementById('cms-hero-heading').value;
+            const heroHighEl = document.getElementById('cms-hero-highlight');
+            if (heroHighEl) siteSettings.heroHighlight = heroHighEl.value;
 
-            siteSettings.heroHighlight = document.getElementById('cms-hero-highlight').value;
+            const heroDescEl = document.getElementById('cms-hero-desc');
+            if (heroDescEl) siteSettings.heroDesc = heroDescEl.value;
 
-            siteSettings.heroDesc = document.getElementById('cms-hero-desc').value;
+            const heroImgEl = document.getElementById('cms-hero-image');
+            if (heroImgEl) siteSettings.heroImage = heroImgEl.value;
 
-            siteSettings.heroImage = document.getElementById('cms-hero-image').value;
+            const heroBgEl = document.getElementById('cms-hero-bg-image');
+            if (heroBgEl) siteSettings.heroBgImage = heroBgEl.value;
 
-            siteSettings.popupEnabled = document.getElementById('cms-popup-enabled').value === 'true';
-            siteSettings.scrollEnabled = document.getElementById('cms-scroll-enabled').value === 'true';
-            siteSettings.popupMessage = document.getElementById('cms-popup-msg').value;
-            siteSettings.scrollMessage = document.getElementById('cms-scroll-msg').value;
-            siteSettings.popupTitle = document.getElementById('cms-popup-title').value;
-            siteSettings.popupBtnText = document.getElementById('cms-popup-btn').value;
-            siteSettings.scrollSpeed = parseInt(document.getElementById('cms-scroll-speed').value) || 15;
-            siteSettings.scrollFontSize = document.getElementById('cms-scroll-fontsize').value;
+            const popupEnEl = document.getElementById('cms-popup-enabled');
+            if (popupEnEl) siteSettings.popupEnabled = popupEnEl.value === 'true';
 
-            siteSettings.heroBgImage = document.getElementById('cms-hero-bg-image').value;
+            const scrollEnEl = document.getElementById('cms-scroll-enabled');
+            if (scrollEnEl) siteSettings.scrollEnabled = scrollEnEl.value === 'true';
 
+            // Popup Customizations
+            const popupTitleEl = document.getElementById('cms-popup-title');
+            if (popupTitleEl) siteSettings.popupTitle = popupTitleEl.value;
 
+            const popupMsgEl = document.getElementById('cms-popup-msg');
+            if (popupMsgEl) siteSettings.popupMessage = popupMsgEl.value;
 
-            const headerBrand = document.getElementById('brand-title-header');
+            const popupBtnEl = document.getElementById('cms-popup-btn');
+            if (popupBtnEl) siteSettings.popupBtnText = popupBtnEl.value;
 
-            if(headerBrand && siteSettings.brandName) headerBrand.innerText = siteSettings.brandName;
+            // Scrolling Text Customizations
+            const scrollMsgEl = document.getElementById('cms-scroll-msg');
+            if (scrollMsgEl) siteSettings.scrollMessage = scrollMsgEl.value;
 
+            const scrollSpeedEl = document.getElementById('cms-scroll-speed');
+            if (scrollSpeedEl) siteSettings.scrollSpeed = parseInt(scrollSpeedEl.value) || 15;
 
+            const scrollFontEl = document.getElementById('cms-scroll-fontsize');
+            if (scrollFontEl) siteSettings.scrollFontSize = scrollFontEl.value;
 
-            const logoContainer = document.getElementById('brand-logo-container');
-
-            if(logoContainer) {
-
-                if(siteSettings.logoUrl) {
-
-                    logoContainer.innerHTML = `<img src="${siteSettings.logoUrl}" class="w-full h-full object-cover">`;
-
-                } else {
-
-                    logoContainer.innerHTML = `<i id="brand-logo-icon" class="fa-solid fa-wand-magic-sparkles text-lg"></i>`;
-
-                }
-
-            }
-
-
-
+            // Cloud Sync & Render
             syncChangesToCloud();
-
             router.render();
-
         }
 
        function applyDynamicSettings() {
