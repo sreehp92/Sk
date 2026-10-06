@@ -2795,7 +2795,7 @@
             `;
         }
     
-        window.setAdminTab = function(tab) {
+       window.setAdminTab = function(tab) {
             try {
                 // 1. Data Safety: டேட்டா காலியாக இருந்தால் பேஜ் கிராஷ் ஆகாமல் தடுக்க
                 if (typeof productsData === 'undefined' || !Array.isArray(productsData)) productsData = [];
@@ -2841,33 +2841,10 @@
                     }
                 }
 
-            } catch (err) {
-                console.error("Tab switch error:", err);
-                alert("Tab Error: " + err.message);
-            }
-        };
-
-        // எல்லா பட்டன் ஈவென்ட்களுக்குமான குளோபல் சப்போர்ட்
-        window.switchAdminTab = window.setAdminTab;
-        window.setTab = window.setAdminTab;
-        function setAdminTab(t) { window.setAdminTab(t); }
-
-        window.setAdminCategoryTab = function(key) {
-            currentAdminCategoryTab = key;
-            if (typeof router !== 'undefined' && typeof router.render === 'function') {
-                router.render();
-            }
-        };
-        function setAdminCategoryTab(key) { window.setAdminCategoryTab(key); }
-
-        window.handleHomepageCMSUpdate = async function(e) {
-            if (e) e.preventDefault();
-
+                
 
         window.handleHomepageCMSUpdate = async function(e) {
             if (e) e.preventDefault();
-
-            alert("Button Clicked Successfully!");
             
             try {
                 // 1. Brand & Hero Fields
