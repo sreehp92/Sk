@@ -654,48 +654,31 @@
 
         }
 
-
-
         // Router Engine with URL Hash `#admin` support
-
         const router = {
-
             navigate: function(route, param = null) {
+                if (route === 'admin') {
+                    const pwd = prompt("Enter Admin Password:");
+                    if (pwd !== "skcrackers2026") {
+                        showToast("Incorrect Admin Password!", "error");
+                        window.location.hash = '';
+                        return;
+                    }
+                }
+
                 if (currentRoute === route && currentRouteParam === param) return;
+
                 currentRoute = route;
                 currentRouteParam = param;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 this.render();
             },
-                if (route === 'admin') {
-
-                    const pwd = prompt("Enter Admin Password:");
-
-                    if (pwd !== "skcrackers2026") {
-
-                        showToast("Incorrect Admin Password!", "error");
-
-                        window.location.hash = '';
-
-                        return;
-
-                    }
-
+            render: function() {
+                if (currentRoute === 'admin') {
                     window.location.hash = 'admin';
-
                 } else {
-
                     window.location.hash = '';
-
                 }
-
-                currentRoute = route;
-
-                currentRouteParam = param;
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-
-                this.render();
 
                 updateActiveNavStyles();
 
