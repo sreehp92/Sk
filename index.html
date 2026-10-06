@@ -97,6 +97,14 @@
             background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.90)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600') center/cover no-repeat;
 
         }
+
+        /* Scrolling Text Animation */
+        .marquee-container { overflow: hidden; white-space: nowrap; width: 100%; }
+        .marquee-content { display: inline-block; padding-left: 100%; animation: marquee linear infinite; }
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
         /* Popup Custom Smooth Animations */
         .popup-overlay-active { opacity: 1; visibility: visible; }
         .popup-overlay-hidden { opacity: 0; visibility: hidden; transition: all 0.3s ease-in-out; }
@@ -146,6 +154,10 @@
         </div>
     </div>
 
+    <!-- Dynamic Scrolling Bar -->
+    <div id="dynamic-scroll-bar" class="hidden bg-gradient-to-r from-amber-600 to-red-600 text-white text-[11px] sm:text-xs font-bold py-1.5 marquee-container z-50 relative">
+        <div id="dynamic-scroll-text" class="marquee-content"></div>
+    </div>
 
 
     <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
@@ -394,7 +406,13 @@
 
             heroBgImage: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600",
 
-            whatsappNumber: "9658399991"
+            whatsappNumber: "9658399991",
+
+            popupEnabled: true,
+            popupMessage: "Welcome to SK Crackers! Get flat 30% OFF on all Family Gift Boxes.",
+            scrollEnabled: true,
+            scrollMessage: "🎉 Mega Diwali Sale! Up to 30% OFF on all Family Packs. Order Now! 🎉",
+            scrollSpeed: 15
 
         };
 
@@ -2287,6 +2305,41 @@
 
                                 </div>
 
+                                <!-- Popup & Scroll Settings -->
+                                <div class="col-span-full border-t border-slate-200 dark:border-slate-700 pt-4 mt-2">
+                                    <h4 class="font-bold text-sm text-amber-600 mb-3">Popup & Scrolling Announcements</h4>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1">Enable Popup?</label>
+                                        <select id="cms-popup-enabled" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">
+                                            <option value="true">Yes, Show Popup</option>
+                                            <option value="false">No, Hide Popup</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1">Enable Scrolling Text?</label>
+                                        <select id="cms-scroll-enabled" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs">
+                                            <option value="true">Yes, Show Scroll</option>
+                                            <option value="false">No, Hide Scroll</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-1">Popup Message</label>
+                                    <textarea id="cms-popup-msg" rows="2" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs"></textarea>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="col-span-2">
+                                        <label class="block text-xs font-semibold mb-1">Scrolling Text Message</label>
+                                        <input type="text" id="cms-scroll-msg" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1">Scroll Speed (Sec)</label>
+                                        <input type="number" id="cms-scroll-speed" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs" title="Lower = Faster">
+                                    </div>
+                                </div>
+
                                 <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition">Save Homepage & Background</button>
 
                             </form>
@@ -2763,6 +2816,12 @@
 
             siteSettings.heroImage = document.getElementById('cms-hero-image').value;
 
+            siteSettings.popupEnabled = document.getElementById('cms-popup-enabled').value === 'true';
+            siteSettings.scrollEnabled = document.getElementById('cms-scroll-enabled').value === 'true';
+            siteSettings.popupMessage = document.getElementById('cms-popup-msg').value;
+            siteSettings.scrollMessage = document.getElementById('cms-scroll-msg').value;
+            siteSettings.scrollSpeed = parseInt(document.getElementById('cms-scroll-speed').value) || 15;
+
             siteSettings.heroBgImage = document.getElementById('cms-hero-bg-image').value;
 
 
@@ -2797,7 +2856,28 @@
 
         }
 
+        function applyDynamicSettings() {
+            const pEn = document.getElementById('cms-popup-enabled');
+            if (pEn) {
+                pEn.value = siteSettings.popupEnabled ? 'true' : 'false';
+                document.getElementById('cms-scroll-enabled').value = siteSettings.scrollEnabled ? 'true' : 'false';
+                document.getElementById('cms-popup-msg').value = siteSettings.popupMessage || '';
+                document.getElementById('cms-scroll-msg').value = siteSettings.scrollMessage || '';
+                document.getElementById('cms-scroll-speed').value = siteSettings.scrollSpeed || 15;
+            }
 
+            const scrollBar = document.getElementById('dynamic-scroll-bar');
+            const scrollText = document.getElementById('dynamic-scroll-text');
+            if(scrollBar && scrollText) {
+                if(siteSettings.scrollEnabled) {
+                    scrollBar.classList.remove('hidden');
+                    scrollText.innerText = siteSettings.scrollMessage;
+                    scrollText.style.animationDuration = siteSettings.scrollSpeed + 's';
+                } else {
+                    scrollBar.classList.add('hidden');
+                }
+            }
+        }    
 
         function handleSafetyCMSUpdate(e) {
 
@@ -3442,7 +3522,7 @@
             } else {
                 router.navigate('home');
             }
-            
+            applyDynamicSettings();
             // Show Popup on first visit
             if (!sessionStorage.getItem('popupShown')) {
                 if (siteSettings && siteSettings.popupMessage) {
