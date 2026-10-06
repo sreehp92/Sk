@@ -2819,84 +2819,107 @@
 
 
 
-        window.handleHomepageCMSUpdate = function(e) {
-    if (e) e.preventDefault();
-    
-    try {
-        // Safe assignment with element existence checks
-        const brandEl = document.getElementById('cms-brand-name');
-        if (brandEl) siteSettings.brandName = brandEl.value;
+        window.handleHomepageCMSUpdate = async function(e) {
+            if (e) e.preventDefault();
+            
+            try {
+                // 1. Brand & Hero Fields
+                const brandEl = document.getElementById('cms-brand-name');
+                if (brandEl) siteSettings.brandName = brandEl.value;
 
-        const logoEl = document.getElementById('cms-logo-url');
-        if (logoEl) siteSettings.logoUrl = logoEl.value;
+                const logoEl = document.getElementById('cms-logo-url');
+                if (logoEl) siteSettings.logoUrl = logoEl.value;
 
-        const heroHeadEl = document.getElementById('cms-hero-heading');
-        if (heroHeadEl) siteSettings.heroHeading = heroHeadEl.value;
+                const heroHeadEl = document.getElementById('cms-hero-heading');
+                if (heroHeadEl) siteSettings.heroHeading = heroHeadEl.value;
 
-        const heroHighEl = document.getElementById('cms-hero-highlight');
-        if (heroHighEl) siteSettings.heroHighlight = heroHighEl.value;
+                const heroHighEl = document.getElementById('cms-hero-highlight');
+                if (heroHighEl) siteSettings.heroHighlight = heroHighEl.value;
 
-        const heroDescEl = document.getElementById('cms-hero-desc');
-        if (heroDescEl) siteSettings.heroDesc = heroDescEl.value;
+                const heroDescEl = document.getElementById('cms-hero-desc');
+                if (heroDescEl) siteSettings.heroDesc = heroDescEl.value;
 
-        const heroImgEl = document.getElementById('cms-hero-image');
-        if (heroImgEl) siteSettings.heroImage = heroImgEl.value;
+                const heroImgEl = document.getElementById('cms-hero-image');
+                if (heroImgEl) siteSettings.heroImage = heroImgEl.value;
 
-        const heroBgEl = document.getElementById('cms-hero-bg-image');
-        if (heroBgEl) siteSettings.heroBgImage = heroBgEl.value;
+                const heroBgEl = document.getElementById('cms-hero-bg-image');
+                if (heroBgEl) siteSettings.heroBgImage = heroBgEl.value;
 
-        const popupEnEl = document.getElementById('cms-popup-enabled');
-        if (popupEnEl) siteSettings.popupEnabled = popupEnEl.value === 'true';
+                // 2. Popup Settings
+                const popupEnEl = document.getElementById('cms-popup-enabled');
+                if (popupEnEl) siteSettings.popupEnabled = popupEnEl.value === 'true';
 
-        const scrollEnEl = document.getElementById('cms-scroll-enabled');
-        if (scrollEnEl) siteSettings.scrollEnabled = scrollEnEl.value === 'true';
+                const popupTitleEl = document.getElementById('cms-popup-title');
+                if (popupTitleEl) siteSettings.popupTitle = popupTitleEl.value;
 
-        // Popup Customizations
-        const popupTitleEl = document.getElementById('cms-popup-title');
-        if (popupTitleEl) siteSettings.popupTitle = popupTitleEl.value;
+                const popupMsgEl = document.getElementById('cms-popup-msg');
+                if (popupMsgEl) siteSettings.popupMessage = popupMsgEl.value;
 
-        const popupMsgEl = document.getElementById('cms-popup-msg');
-        if (popupMsgEl) siteSettings.popupMessage = popupMsgEl.value;
+                const popupBtnEl = document.getElementById('cms-popup-btn');
+                if (popupBtnEl) siteSettings.popupBtnText = popupBtnEl.value;
 
-        const popupBtnEl = document.getElementById('cms-popup-btn');
-        if (popupBtnEl) siteSettings.popupBtnText = popupBtnEl.value;
+                // 3. Scrolling Text Settings
+                const scrollEnEl = document.getElementById('cms-scroll-enabled');
+                if (scrollEnEl) siteSettings.scrollEnabled = scrollEnEl.value === 'true';
 
-        // Scrolling Text Customizations
-        const scrollMsgEl = document.getElementById('cms-scroll-msg');
-        if (scrollMsgEl) siteSettings.scrollMessage = scrollMsgEl.value;
+                const scrollMsgEl = document.getElementById('cms-scroll-msg');
+                if (scrollMsgEl) siteSettings.scrollMessage = scrollMsgEl.value;
 
-        const scrollSpeedEl = document.getElementById('cms-scroll-speed');
-        if (scrollSpeedEl) siteSettings.scrollSpeed = parseInt(scrollSpeedEl.value) || 15;
+                const scrollSpeedEl = document.getElementById('cms-scroll-speed');
+                if (scrollSpeedEl) siteSettings.scrollSpeed = parseInt(scrollSpeedEl.value) || 15;
 
-        const scrollFontEl = document.getElementById('cms-scroll-fontsize');
-        if (scrollFontEl) siteSettings.scrollFontSize = scrollFontEl.value;
+                const scrollFontEl = document.getElementById('cms-scroll-fontsize');
+                if (scrollFontEl) siteSettings.scrollFontSize = scrollFontEl.value;
 
-        // Apply changes immediately
-        if (typeof applyDynamicSettings === 'function') {
-            applyDynamicSettings();
-        }
+               
+                await syncChangesToCloud();
 
-        // Cloud Sync & Render
-        if (typeof syncChangesToCloud === 'function') {
-            syncChangesToCloud();
-        }
-        
-        if (typeof router !== 'undefined' && typeof router.render === 'function') {
-            router.render();
-        }
+            
+                const headerBrand = document.getElementById('brand-title-header');
+                if(headerBrand && siteSettings.brandName) headerBrand.innerText = siteSettings.brandName;
 
-        if (typeof applyDynamicSettings === 'function') {
-            applyDynamicSettings();
-        }
-        
-        console.log("Homepage CMS Saved Successfully!");
-        alert("Homepage Settings Saved Successfully! 🎉"); // Success feedback
-        
-    } catch (err) {
-        console.error("CMS Save Error:", err);
-        alert("Error saving: " + err.message);
-    }
-};
+                const logoContainer = document.getElementById('brand-logo-container');
+                if(logoContainer) {
+                    if(siteSettings.logoUrl) {
+                        logoContainer.innerHTML = `<img src="${siteSettings.logoUrl}" class="w-full h-full object-cover">`;
+                    } else {
+                        logoContainer.innerHTML = `<i id="brand-logo-icon" class="fa-solid fa-wand-magic-sparkles text-lg"></i>`;
+                    }
+                }
+
+                router.render();
+                alert("Homepage Settings Saved to Supabase Successfully! 🎉");
+
+            } catch (err) {
+                console.error("CMS Save Error:", err);
+                alert("Save Error: " + err.message);
+            }
+        };
+
+        async function syncChangesToCloud() {
+            showToast("Syncing to Supabase...", "info");
+            
+            const payload = { 
+                id: 1, 
+                content: { siteSettings, businessInfo, categoriesList, productsData, faqsData, safetyPointsData } 
+            };
+
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/store_data`, {
+                method: "POST",
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": `Bearer ${SUPABASE_KEY}`,
+                    "Content-Type": "application/json",
+                    "Prefer": "resolution=merge-duplicates"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const errText = await res.text();
+                throw new Error("Supabase Error: " + errText);
+            }
+        }
 
        function applyDynamicSettings() {
             // Update Admin Fields if inside Admin Panel
