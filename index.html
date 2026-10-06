@@ -661,7 +661,12 @@
         const router = {
 
             navigate: function(route, param = null) {
-
+                if (currentRoute === route && currentRouteParam === param) return;
+                currentRoute = route;
+                currentRouteParam = param;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                this.render();
+            },
                 if (route === 'admin') {
 
                     const pwd = prompt("Enter Admin Password:");
