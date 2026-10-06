@@ -538,6 +538,8 @@
 
         let currentAdminCategoryTab = 'all';
 
+        let selectedProductIds = [];
+
 // --- POPUP CONTROLLER FUNCTIONS ---
         function renderPopupContent() {
             const media = document.getElementById('popup-media-container');
@@ -2504,6 +2506,13 @@
 
                                 <h3 class="font-bold text-base flex items-center"><i class="fa-solid fa-boxes-stacked text-amber-600 mr-2"></i> Product Manager (${filteredInventory.length} Items)</h3>
 
+<button id="delete-selected-btn" onclick="deleteSelectedProducts()" class="${selectedProductIds.length > 0 ? '' : 'hidden'} bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition mr-2">
+                                    <i class="fa-solid fa-trash-can mr-1"></i> Delete Selected (<span id="selected-count-badge">${selectedProductIds.length}</span>)
+                                </button>
+                                <button onclick="deleteAllProducts()" class="bg-red-100 dark:bg-red-950/50 hover:bg-red-600 text-red-600 hover:text-white border border-red-300 dark:border-red-800 text-xs font-bold px-4 py-2.5 rounded-xl transition mr-2">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Delete All
+                                </button>
+                               
                                 <button onclick="openAddProductModal()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition">
 
                                     <i class="fa-solid fa-plus mr-1"></i> Add New Product
@@ -2538,6 +2547,10 @@
 
                                         <tr>
 
+                                         <th class="p-3 w-10">
+                                                <input type="checkbox" id="select-all-products-cb" onchange="toggleSelectAllProducts(this)" title="Select All" class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                                            </th>
+                                             
                                             <th class="p-3">Image</th>
 
                                             <th class="p-3">Name</th>
@@ -2561,6 +2574,10 @@
                                         ${filteredInventory.map(p => `
 
                                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+
+                                            <td class="p-3">
+                                                    <input type="checkbox" ${selectedProductIds.includes(p.id) ? 'checked' : ''} onchange="toggleSelectProduct(${p.id})" class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                                                </td>
 
                                                 <td class="p-3"><img src="${p.image}" class="w-10 h-10 rounded-xl object-cover" onerror="this.src='https://placehold.co/100x100/1e293b/f8fafc?text=Img'"></td>
 
@@ -3066,6 +3083,86 @@
 
         }
 
+        // --- BULK PRODUCT SELECTION & DELETION FUNCTIONS ---
+        function toggleSelectProduct(id) {
+            if (selectedProductIds.includes(id)) {
+                selectedProductIds = selectedProductIds.filter(item => item !== id);
+            } else {
+                selectedProductIds.push(id);
+            }
+            updateBulkDeleteUI();
+        }
+
+        function toggleSelectAllProducts(masterCheckbox) {
+            let currentProducts = productsData;
+            if (currentAdminCategoryTab !== 'all') {
+                currentProducts = productsData.filter(p => p.category === currentAdminCategoryTab);
+            }
+
+            const currentIds = currentProducts.map(p => p.id);
+            if (masterCheckbox.checked) {
+                selectedProductIds = Array.from(new Set([...selectedProductIds, ...currentIds]));
+            } else {
+                selectedProductIds = selectedProductIds.filter(id => !currentIds.includes(id));
+            }
+            router.render();
+        }
+
+        function updateBulkDeleteUI() {
+            const btn = document.getElementById('delete-selected-btn');
+            const countSpan = document.getElementById('selected-count-badge');
+            const masterCb = document.getElementById('select-all-products-cb');
+            
+            let currentProducts = productsData;
+            if (currentAdminCategoryTab !== 'all') {
+                currentProducts = productsData.filter(p => p.category === currentAdminCategoryTab);
+            }
+            const currentIds = currentProducts.map(p => p.id);
+            const allSelected = currentIds.length > 0 && currentIds.every(id => selectedProductIds.includes(id));
+
+            if (masterCb) masterCb.checked = allSelected;
+
+            if (btn && countSpan) {
+                if (selectedProductIds.length > 0) {
+                    btn.classList.remove('hidden');
+                    countSpan.innerText = selectedProductIds.length;
+                } else {
+                    btn.classList.add('hidden');
+                }
+            }
+        }
+
+        function deleteSelectedProducts() {
+            if (selectedProductIds.length === 0) {
+                showToast("No products selected!", "info");
+                return;
+            }
+
+            if (confirm(`Are you sure you want to delete ${selectedProductIds.length} selected product(s)?`)) {
+                productsData = productsData.filter(p => !selectedProductIds.includes(p.id));
+                selectedProductIds = [];
+                syncChangesToCloud();
+                router.render();
+                showToast("Selected products deleted successfully!");
+            }
+        }
+
+        function deleteAllProducts() {
+            if (productsData.length === 0) {
+                showToast("Inventory is already empty!", "info");
+                return;
+            }
+
+            if (confirm("⚠️ WARNING: Are you sure you want to permanently delete ALL products in your store?")) {
+                if (confirm("Final confirmation: This cannot be undone! Delete all products?")) {
+                    productsData = [];
+                    selectedProductIds = [];
+                    syncChangesToCloud();
+                    router.render();
+                    showToast("All products deleted successfully!", "error");
+                }
+            }
+        }
 
 
         function deleteCategory(key) {
