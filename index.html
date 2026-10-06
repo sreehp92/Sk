@@ -681,10 +681,7 @@
                 }
 
                 updateActiveNavStyles();
-
-            },
-
-            render: function() {
+                
 
                 const main = document.getElementById('app-main');
 
@@ -1270,17 +1267,12 @@
         let searchQuery = '';
 
 
-
-        function renderCatalogueView(initialCat = null) {
-
+            function renderCatalogueView(initialCat = null) {
             if (initialCat !== undefined && initialCat !== null) {
-
                 selectedCategoryFilter = initialCat;
-
+                currentRouteParam = null;
             }
-
-
-
+                
             const filteredProducts = productsData.filter(p => {
 
                 const matchesCat = selectedCategoryFilter === 'all' || p.category === selectedCategoryFilter;
