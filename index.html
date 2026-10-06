@@ -2797,7 +2797,11 @@
 
         }
 
-        w// 👈 Bulletproof Admin Tab Switcher & Renderer
+        </div>
+            `;
+        }
+
+        // 👈 Bulletproof Admin Tab Switcher & Renderer
         window.setAdminTab = function(tab) {
             try {
                 // 1. Data Safety: டேட்டா காலியாக இருந்தால் பேஜ் கிராஷ் ஆகாமல் தடுக்க
@@ -2810,7 +2814,7 @@
                 // 2. Tab Name Set
                 currentAdminTab = tab;
 
-                // 3. Router Re-render (ஸ்கிரீனை புதுப்பிக்கும் அசல் முறை)
+                // 3. Router Re-render
                 if (typeof router !== 'undefined') {
                     if (typeof router.render === 'function') {
                         router.render();
@@ -2819,11 +2823,11 @@
                     }
                 }
 
-                // 4. Backup DOM Switch (ஒருவேளை Router ரெண்டர் செய்யாவிட்டாலும் நேரடியாக திறக்க)
+                // 4. Backup DOM Switch
                 const targetIds = [
                     'admin-tab-' + tab,
-                    'admin-tab-' + tab.replace(/s$/, ''), // singular (product)
-                    'admin-tab-' + tab + 's',             // plural (products)
+                    'admin-tab-' + tab.replace(/s$/, ''),
+                    'admin-tab-' + tab + 's',
                     'admin-tab-faq',
                     'admin-tab-faqs',
                     'admin-tab-settings',
@@ -2863,6 +2867,8 @@
         };
         function setAdminCategoryTab(key) { window.setAdminCategoryTab(key); }
 
+        window.handleHomepageCMSUpdate = async function(e) {
+            if (e) e.preventDefault();
 
 
         window.handleHomepageCMSUpdate = async function(e) {
