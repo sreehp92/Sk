@@ -429,7 +429,8 @@
             marqueeBgColor: "#D97706",
             marqueeTextColor: "#ffffff",
             marqueeFontSize: 13,
-            marqueeSpeed: 20
+            marqueeSpeed: 20,
+            marqueeFontBold: true
         };
 
         let businessInfo = {
@@ -617,6 +618,7 @@
 
             textSpan.style.color = siteSettings.marqueeTextColor || '#ffffff';
             textSpan.style.fontSize = `${siteSettings.marqueeFontSize || 13}px`;
+            textSpan.style.fontWeight = siteSettings.marqueeFontBold ? 'bold' : 'normal';
             textSpan.innerText = siteSettings.marqueeText || '';
         }
         
@@ -2441,6 +2443,14 @@
                                         <label for="cms-marquee-enabled" class="text-xs font-bold cursor-pointer">Show Scrolling Announcement Bar on Top</label>
                                     </div>
 
+                                    <!-- Bold Text Toggle -->
+                                    <div class="flex items-center space-x-2 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                                        <input type="checkbox" id="cms-marquee-font-bold" ${siteSettings.marqueeFontBold ? 'checked' : ''} class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                                        <label for="cms-marquee-font-bold" class="text-xs font-bold cursor-pointer flex items-center">
+                                            <i class="fa-solid fa-bold mr-1.5 text-amber-600"></i> Make Scrolling Text Bold (தடிமனான எழுத்துக்கள்)
+                                        </label>
+                                    </div>
+
                                     <!-- Scroll Message Text -->
                                     <div>
                                         <label class="block text-xs font-semibold mb-1">Scrolling Message Text</label>
@@ -2989,6 +2999,7 @@
 
             // Marquee Ticker Settings Update
             siteSettings.marqueeEnabled = document.getElementById('cms-marquee-enabled').checked;
+            siteSettings.marqueeFontBold = document.getElementById('cms-marquee-font-bold').checked;
             siteSettings.marqueeText = document.getElementById('cms-marquee-text').value;
             siteSettings.marqueeBgColor = document.getElementById('cms-marquee-bg-color').value;
             siteSettings.marqueeTextColor = document.getElementById('cms-marquee-text-color').value;
