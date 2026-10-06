@@ -3536,16 +3536,20 @@
             } else {
                 router.navigate('home');
             }
+            
             applyDynamicSettings();
-            // Show Popup on first visit
-            if (!sessionStorage.getItem('popupShown')) {
-                if (siteSettings && siteSettings.popupMessage) {
-                    document.getElementById('promo-popup-text').innerText = siteSettings.popupMessage;
+
+            if (siteSettings && siteSettings.popupEnabled !== false) {
+                if (siteSettings.popupMessage) {
+                    const popupText = document.getElementById('promo-popup-text');
+                    if (popupText) popupText.innerText = siteSettings.popupMessage;
                 }
                 
+                // டெஸ்ட் செய்ய පහல இருக்குற sessionStorage-க்கு பதிலா இதை பயன்படுத்தலாம்
                 setTimeout(() => {
-                    openPromoPopup();
-                    sessionStorage.setItem('popupShown', 'true');
+                    if (typeof openPromoPopup === 'function') {
+                        openPromoPopup();
+                    }
                 }, 1000);
             }
         };
